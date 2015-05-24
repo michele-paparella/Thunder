@@ -3,6 +3,12 @@ A flexible library for Android that helps you to build apps painlessly and quick
 
 TODO
 
+# Permissions
+In order to use Thunder, please be aware that the library uses the following permissions:
+
+- android.permission.READ_PHONE_STATE
+- android.permission.ACCESS_NETWORK_STATE
+
 License
 ==============
 	Copyright 2015 Michele Paparella

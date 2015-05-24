@@ -21,7 +21,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.thunder.exception.DataNotAvailableException;
+
+import java.io.IOException;
 
 public class DeviceManager {
 
@@ -41,6 +46,63 @@ public class DeviceManager {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    //TODO get other useful ids 
+    // Do not call this function from the main thread. Otherwise,
+    // an IllegalStateException will be thrown.
+    //TODO test
+    public static String getAdvertisingId(Context context) throws GooglePlayServicesNotAvailableException, IOException, GooglePlayServicesRepairableException, DataNotAvailableException {
+        AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
+        if (adInfo != null) {
+            final String id = adInfo.getId();
+            return id;
+        } else {
+            throw new DataNotAvailableException("Problem with Google Analytics - getAdvertisingId");
+        }
+    }
+
+    //TODO test
+    public static boolean isLimitAdTrackingEnabled(Context context) throws GooglePlayServicesNotAvailableException, IOException, GooglePlayServicesRepairableException, DataNotAvailableException {
+        AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
+        if (adInfo != null) {
+            final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
+            return isLAT;
+        } else {
+            throw new DataNotAvailableException("Problem with Google Analytics - isLimitAdTrackingEnabled");
+        }
+    }
+
+    //TODO
+    public static void getResolution(Context context){
+        throw new RuntimeException("not yet implemented");
+    }
+
+    //TODO
+    public static void getScreenSize(Context context){
+        throw new RuntimeException("not yet implemented");
+    }
+
+    //TODO
+    public static void getApiVersion(Context context){
+        throw new RuntimeException("not yet implemented");
+    }
+
+    //TODO
+    public static void getDeviceName(Context context){
+        throw new RuntimeException("not yet implemented");
+    }
+
+    //TODO
+    public static void getManufacturerName(Context context){
+        throw new RuntimeException("not yet implemented");
+    }
+
+    //TODO
+    public static void getAvailableMemory(Context context){
+        throw new RuntimeException("not yet implemented");
+    }
+
+    //TODO
+    public static void getMSISDN(Context context){
+        throw new RuntimeException("not yet implemented");
+    }
 
 }
