@@ -85,11 +85,21 @@ public class DeviceManager {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @return The absolute height of the display in pixels.
+     */
     public static int getDisplayHeight(Context context){
         Point point = getDisplaySize(context);
         return point.y;
     }
 
+    /**
+     *
+     * @param context
+     * @return The absolute width of the display in pixels.
+     */
     public static int getDisplayWidth(Context context){
         Point point = getDisplaySize(context);
         return point.x;
@@ -143,26 +153,6 @@ public class DeviceManager {
     /**
      *
      * @param context
-     * @return The absolute height of the display in pixels.
-     */
-    public static int getHeightPixels(Context context){
-        DisplayMetrics metrics = getDisplayMetrics(context);
-        return metrics.heightPixels;
-    }
-
-    /**
-     *
-     * @param context
-     * @return The absolute width of the display in pixels.
-     */
-    public static int getWidthPixels(Context context){
-        DisplayMetrics metrics = getDisplayMetrics(context);
-        return metrics.widthPixels;
-    }
-
-    /**
-     *
-     * @param context
      * @return The logical density of the display.  This is a scaling factor for the
      * Density Independent Pixel unit, where one DIP is one pixel on an
      * approximately 160 dpi screen (for example a 240x320, 1.5"x2" screen),
@@ -211,12 +201,15 @@ public class DeviceManager {
     }
 
     /**
-     * Returns the phone number string for line 1, for example, the MSISDN
-     * for a GSM phone. Return null if it is unavailable.
+     * Returns the unique device ID, for example, the IMEI for GSM and the MEID
+     * or ESN for CDMA phones. Return null if device ID is not available.
+     *
+     * <p>Requires Permission:
+     *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
      */
     public static String getImei(Context context){
         TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tMgr.getLine1Number();
+        return tMgr.getDeviceId();
     }
 
 }
