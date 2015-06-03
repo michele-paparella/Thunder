@@ -18,8 +18,6 @@ package com.thunder.device;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -29,37 +27,12 @@ import android.view.WindowManager;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.thunder.R;
 import com.thunder.exception.DataNotAvailableException;
 
 import java.io.IOException;
 
 public class DeviceManager {
-
-    /**
-     * @param context
-     * @return true if the device is connected to internet, false otherwise
-     */
-    public static boolean isConnected(Context context){
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-    }
-
-    /**
-     * Reports the type of network to which the
-     * info in this {@code NetworkInfo} pertains.
-     * @return one of {@link ConnectivityManager#TYPE_MOBILE}, {@link
-     * ConnectivityManager#TYPE_WIFI}, {@link ConnectivityManager#TYPE_WIMAX}, {@link
-     * ConnectivityManager#TYPE_ETHERNET},  {@link ConnectivityManager#TYPE_BLUETOOTH}, or other
-     * types defined by {@link ConnectivityManager}
-     */
-    public static int getActiveConnectionType(Context context) throws DataNotAvailableException {
-        if (!isConnected(context)){
-            throw new DataNotAvailableException("device is not connected");
-        }
-        ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return mgr.getActiveNetworkInfo().getType();
-    }
 
     // Do not call this function from the main thread. Otherwise,
     // an IllegalStateException will be thrown.
@@ -70,7 +43,7 @@ public class DeviceManager {
             final String id = adInfo.getId();
             return id;
         } else {
-            throw new DataNotAvailableException("Problem with Google Analytics - getAdvertisingId");
+            throw new DataNotAvailableException(context.getString(R.string.google_analytics_problem));
         }
     }
 
@@ -81,7 +54,7 @@ public class DeviceManager {
             final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
             return isLAT;
         } else {
-            throw new DataNotAvailableException("Problem with Google Analytics - isLimitAdTrackingEnabled");
+            throw new DataNotAvailableException(context.getString(R.string.google_analytics_problem));
         }
     }
 

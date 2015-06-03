@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.thunder.R;
 import com.thunder.exception.DataNotAvailableException;
 
 public class AppManager {
@@ -47,7 +48,7 @@ public class AppManager {
         if (context.getPackageManager().getApplicationLabel(pInfo.applicationInfo) != null) {
             return context.getPackageManager().getApplicationLabel(pInfo.applicationInfo).toString();
         }
-        throw new DataNotAvailableException("application label not found");
+        throw new DataNotAvailableException(context.getString(R.string.app_name_not_found));
     }
 
     public static String getPackage(Context context){

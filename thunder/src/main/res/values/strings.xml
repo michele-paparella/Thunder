@@ -6,5 +6,8 @@
     <string name="rating_dialog_ok">Rate</string>
     <string name="rating_dialog_cancel">Later</string>
     <string name="rating_dialog_no">Never</string>
-
+    <string name="app_name_not_found">application label not found</string>
+    <string name="device_not_connected">device is not connected</string>
+    <string name="ip_not_available">IP not Available</string>
+    <string name="google_analytics_problem">Problem with Google Analytics</string>
 </resources>
