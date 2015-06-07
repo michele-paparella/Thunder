@@ -1,7 +1,7 @@
 # Thunder
 A flexible library for Android that helps you to build apps painlessly and quickly
 
-TODO
+TODO write modules
 
 # Permissions
 In order to use Thunder, please be aware that the library uses the following permissions:
