@@ -30,6 +30,7 @@ import com.thunder.prefs.SharedPrefsManager;
 /**
  *
  */
+//TODO test
 public class RatingPopupImpl implements RatingPopup{
 
 
