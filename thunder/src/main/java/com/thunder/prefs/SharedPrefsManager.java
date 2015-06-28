@@ -16,13 +16,11 @@ package com.thunder.prefs;
  * limitations under the License.
  */
 
-import android.animation.FloatEvaluator;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 public class SharedPrefsManager {
@@ -144,14 +142,9 @@ public class SharedPrefsManager {
         return sharedPreferences.contains(key);
     }
 
-    public void incrementSync(String key, int value, int step){
-        int oldValue = getInt(key, value);
+    public void incrementSync(String key, int defValue, int step){
+        int oldValue = getInt(key, defValue);
         sharedPreferences.edit().putInt(key, oldValue+step).commit();
-    }
-
-    public void decrementSync(String key, int value, int step){
-        int oldValue = getInt(key, value);
-        sharedPreferences.edit().putInt(key, oldValue-step).commit();
     }
 
     public int getInt(String key, int defValue){

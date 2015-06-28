@@ -35,19 +35,20 @@ public class RatingPopupImpl implements RatingPopup{
 
 
     private static final String PREFS_NAME = "rating_popup_prefs";
-    private static final String FIRST_RATING_POPUP = "first_rating_popup";
-    private static final String MALUS_RATING_POPUP = "malus_rating_popup";
     private static final String CURRENT_RATING_POPUP = "currentRatingPopup";
-    private static final String NEXT_RATING_POPUP = "nextRatingPopup";
+    //this flag is true only if the algorithm should check for the first_rating_popup value in the "thunder_config.xml" file
+    private static final String SHOULD_CHECK_FOR_FIRST_RATING_POPUP = "should_check_for_first_rating_popup";
+    private static final String NEXT_RATING_POPUP = "next_rating_popup";
 
-    private RatingPopupListener listener;
+    private static RatingPopupListener ratingPopupListener;
     private static SharedPrefsManager sharedPrefsManager;
     private static Context context;
     private static RatingPopupImpl instance;
 
-    public static RatingPopupImpl getInstance(Context c) {
+    public static RatingPopupImpl getInstance(Context c, RatingPopupListener listener) {
         if (instance == null){
             context = c;
+            ratingPopupListener = listener;
             sharedPrefsManager = new SharedPrefsManager(context, PREFS_NAME, Context.MODE_PRIVATE);
             instance = new RatingPopupImpl();
         }
@@ -56,32 +57,38 @@ public class RatingPopupImpl implements RatingPopup{
 
     @Override
     public void onResume() {
-        if (getPrefs(CURRENT_RATING_POPUP) != -1) {
-            sharedPrefsManager.incrementSync(CURRENT_RATING_POPUP, -1, 1);
-            if (getPrefs(FIRST_RATING_POPUP) != -1 && getPrefs(CURRENT_RATING_POPUP) == getPrefs(FIRST_RATING_POPUP)) {
-                sharedPrefsManager.putIntSync(FIRST_RATING_POPUP, -1);
-                sharedPrefsManager.putIntSync(NEXT_RATING_POPUP, getPrefs(MALUS_RATING_POPUP));
+        //updating the values taken from "thunder_config.xml" file
+        if (!sharedPrefsManager.contains(CURRENT_RATING_POPUP)){
+            //first install
+            sharedPrefsManager.putIntSync(CURRENT_RATING_POPUP, 0);
+        }
+        if (sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) != -1){
+            sharedPrefsManager.incrementSync(CURRENT_RATING_POPUP, 0, 1);
+            if (sharedPrefsManager.getBoolean(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, true) &&
+                    sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == getConfigurationValue(R.integer.first_rating_popup)) {
+                sharedPrefsManager.putBooleanSync(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, false);
                 showRateDialog();
-            } else if (sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == sharedPrefsManager.getInt(NEXT_RATING_POPUP, -1)) {
+            }else if (sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == sharedPrefsManager.getInt(NEXT_RATING_POPUP, -1)) {
                 showRateDialog();
             }
         }
     }
 
-    private int getPrefs(String key){
-        return sharedPrefsManager.getInt(key, -1);
+    private int getConfigurationValue(int id){
+        return context.getResources().getInteger(id);
     }
 
     @Override
     public void setRatingPopupListener(RatingPopupListener listener) {
-        this.listener = listener;
+        this.ratingPopupListener = listener;
     }
 
     /**
      * Show the rate dialog
-     * //TODO support multiple languages
+     *
      */
     public void showRateDialog() {
+        //TODO support multiple languages
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.rating_dialog_title);
         builder.setMessage(R.string.rating_dialog_message);
@@ -91,30 +98,41 @@ public class RatingPopupImpl implements RatingPopup{
                 String appPackage = context.getPackageName();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackage));
                 context.startActivity(intent);
-                //deleting all the preferences
-                sharedPrefsManager.clearSync();
-                listener.onRatingOk();
+                //it will never show the popup
+                sharedPrefsManager.putIntSync(CURRENT_RATING_POPUP, -1);
+                if (ratingPopupListener != null) {
+                    ratingPopupListener.onRatingOk();
+                }
             }
         });
         builder.setNeutralButton(R.string.rating_dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sharedPrefsManager.putIntSync(NEXT_RATING_POPUP, getPrefs(MALUS_RATING_POPUP));
-                listener.onRatingLater();
+                sharedPrefsManager.incrementSync(NEXT_RATING_POPUP, sharedPrefsManager.getInt(CURRENT_RATING_POPUP, 0),
+                        getConfigurationValue(R.integer.neutral_rating_popup));
+                if (ratingPopupListener != null) {
+                    ratingPopupListener.onRatingLater();
+                }
             }
         });
         builder.setNegativeButton(R.string.rating_dialog_no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //deleting all the preferences
-                sharedPrefsManager.clearSync();
-                listener.onRatingNo();
+                //it will never show the popup
+                sharedPrefsManager.putIntSync(CURRENT_RATING_POPUP, -1);
+                if (ratingPopupListener != null) {
+                    ratingPopupListener.onRatingNo();
+                }
             }
         });
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                listener.onRatingCancel();
+                sharedPrefsManager.incrementSync(NEXT_RATING_POPUP, sharedPrefsManager.getInt(CURRENT_RATING_POPUP, 0),
+                        getConfigurationValue(R.integer.negative_rating_popup));
+                if (ratingPopupListener != null) {
+                    ratingPopupListener.onRatingCancel();
+                }
             }
         });
         builder.create().show();
