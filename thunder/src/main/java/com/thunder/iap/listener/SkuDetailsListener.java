@@ -1,4 +1,4 @@
-package com.thunder.iap;
+package com.thunder.iap.listener;
 
 /*
  * Copyright (C) 2015 Michele Paparella
@@ -20,12 +20,16 @@ import android.os.Bundle;
 
 import org.json.JSONObject;
 
-public interface BuyItemListener {
+import java.util.List;
 
-    public void onSuccess(JSONObject object);
+public interface SkuDetailsListener {
 
-    public void onServerError(Bundle bundle);
+    public void onResult(List<JSONObject> skuDetails);
 
+    //generic exception
     public void onError(Exception e);
 
+    //this callback is called after an error code is sent from the server
+    //http://developer.android.com/google/play/billing/billing_reference.html#billing-codes
+    public void onServerError(Bundle skuDetails);
 }

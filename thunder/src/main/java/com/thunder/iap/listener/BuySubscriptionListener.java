@@ -1,4 +1,4 @@
-package com.thunder.iap;
+package com.thunder.iap.listener;
 
 /*
  * Copyright (C) 2015 Michele Paparella
@@ -18,16 +18,17 @@ package com.thunder.iap;
 
 import android.os.Bundle;
 
-import com.thunder.iap.model.PurchasedItem;
+import org.json.JSONObject;
 
-import java.util.Map;
+public interface BuySubscriptionListener {
 
-public interface GetPurchasedItemsListener {
+    public void onSuccess(JSONObject object);
 
-    public void onSuccess(Map<String, PurchasedItem> skuToPurchasedItem);
-
+    //this callback is called after an error code is sent from the server
+    //http://developer.android.com/google/play/billing/billing_reference.html#billing-codes
     public void onServerError(Bundle bundle);
 
+    //generic exception
     public void onError(Exception e);
 
 }

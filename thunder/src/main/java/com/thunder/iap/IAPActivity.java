@@ -28,6 +28,11 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.android.vending.billing.IInAppBillingService;
+import com.thunder.iap.listener.BuyItemListener;
+import com.thunder.iap.listener.BuySubscriptionListener;
+import com.thunder.iap.listener.ConsumePurchaseListener;
+import com.thunder.iap.listener.PurchasedItemsListener;
+import com.thunder.iap.listener.SkuDetailsListener;
 import com.thunder.iap.model.PurchasedItem;
 
 import org.json.JSONException;
@@ -40,8 +45,10 @@ import java.util.Map;
 public abstract class IAPActivity extends Activity {
 
     private IInAppBillingService mService;
-    private static final int BILLING_RESPONSE_RESULT_OK = 0;
     private BuyItemListener buyItemListener;
+    private BuySubscriptionListener buySubscriptionListener;
+    private static final int RC_INAPP_BUY = 1001;
+    private static final int RC_SUBS_BUY = 9999;
 
     ServiceConnection mServiceConn = new ServiceConnection() {
         @Override
@@ -50,8 +57,7 @@ public abstract class IAPActivity extends Activity {
         }
 
         @Override
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
+        public void onServiceConnected(ComponentName name, IBinder service) {
             mService = IInAppBillingService.Stub.asInterface(service);
         }
     };
@@ -82,7 +88,8 @@ public abstract class IAPActivity extends Activity {
                 try {
                     Bundle skuDetails = mService.getSkuDetails(3, getPackageName(), "inapp", querySkus);
                     ArrayList<JSONObject> result = new ArrayList<JSONObject>();
-                    if (skuDetails != null && skuDetails.getInt("RESPONSE_CODE") == BILLING_RESPONSE_RESULT_OK) {
+                    int response = skuDetails.getInt("RESPONSE_CODE");
+                    if (response == 0) {
                         ArrayList<String> responseList = skuDetails.getStringArrayList("DETAILS_LIST");
                         for (String thisResponse : responseList) {
                             JSONObject object = null;
@@ -109,28 +116,31 @@ public abstract class IAPActivity extends Activity {
         }).start();
     }
 
-    public void buyItem(final String sku, final BuyItemListener listener){
+    public void buyItem(final String sku, final String developerPayload, final BuyItemListener buyItemListener){
+        this.buyItemListener = buyItemListener;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
-                            sku, "inapp", "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ");
-                    if (buyIntentBundle != null && buyIntentBundle.getInt("RESPONSE_CODE") == BILLING_RESPONSE_RESULT_OK){
+                            sku, "inapp", developerPayload);
+                    int response = buyIntentBundle.getInt("RESPONSE_CODE");
+                    if (response == 0) {
                         PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
                         try {
-                            startIntentSenderForResult(pendingIntent.getIntentSender(), 1001, new Intent(), Integer.valueOf(0),
+                            startIntentSenderForResult(pendingIntent.getIntentSender(), RC_INAPP_BUY, new Intent(), Integer.valueOf(0),
                                     Integer.valueOf(0), Integer.valueOf(0));
                             //the onSuccess callback of the listener will be called on the method onActivityResult
                         } catch (IntentSender.SendIntentException e) {
                             e.printStackTrace();
+                            buyItemListener.onError(e);
                         }
                     } else {
-                        listener.onServerError(buyIntentBundle);
+                        buyItemListener.onServerError(buyIntentBundle);
                     }
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                    listener.onError(e);
+                    buyItemListener.onError(e);
                 }
             }
         }).start();
@@ -138,7 +148,8 @@ public abstract class IAPActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1001) {
+        if (requestCode == RC_INAPP_BUY) {
+            //in app item bought
             int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
             String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
             String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
@@ -153,69 +164,157 @@ public abstract class IAPActivity extends Activity {
                 catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else {
+                if (buyItemListener != null) {
+                    buyItemListener.onError(new RuntimeException("Error during onActivityResult"));
+                }
+            }
+        }
+        if (requestCode == RC_SUBS_BUY){
+            //subscription bought
+            int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
+            String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
+            String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
+            if (resultCode == RESULT_OK) {
+                try {
+                    JSONObject jo = new JSONObject(purchaseData);
+                    //String sku = jo.getString("productId");
+                    if (buySubscriptionListener != null) {
+                        buySubscriptionListener.onSuccess(jo);
+                    }
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                if (buySubscriptionListener != null) {
+                    buySubscriptionListener.onError(new RuntimeException("Error during onActivityResult"));
+                }
             }
         }
     }
 
-    public void getPurchasedItems(final GetPurchasedItemsListener purchasedItemsListener){
+    public void getInAppPurchasedItems(final PurchasedItemsListener purchasedItemsListener){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getPurchasedItems("inapp", purchasedItemsListener);
+            }
+        }).start();
+    }
+
+
+    public void consumePurchase(final String purchaseToken, final ConsumePurchaseListener consumePurchaseListener){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Bundle ownedItems = mService.getPurchases(3, getPackageName(), "inapp", null);
-                    int response = ownedItems.getInt("RESPONSE_CODE");
+                    int response = mService.consumePurchase(3, getPackageName(), purchaseToken);
                     if (response == 0) {
-                        ArrayList<String> ownedSkus = ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-                        ArrayList<String>  purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-                        ArrayList<String>  signatureList = ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
-                        String continuationToken = ownedItems.getString("INAPP_CONTINUATION_TOKEN");
-                        Map<String, PurchasedItem> skuToPurchasedItem = new HashMap<String, PurchasedItem>();
-                        for (int i = 0; i < purchaseDataList.size(); ++i) {
-                            String purchaseData = purchaseDataList.get(i);
-                            String signature = signatureList.get(i);
-                            String sku = ownedSkus.get(i);
-                            // do something with this purchase information
-                            // e.g. display the updated list of products owned by user
-                            skuToPurchasedItem.put(sku, new PurchasedItem(purchaseData, signature, sku));
-                        }
-                        while (continuationToken != null){
-                            try {
-                                ownedItems = mService.getPurchases(3, getPackageName(), "inapp", continuationToken);
-                                response = ownedItems.getInt("RESPONSE_CODE");
-                                if (response == 0) {
-                                    ownedSkus = ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-                                    purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-                                    signatureList = ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
-                                    continuationToken = ownedItems.getString("INAPP_CONTINUATION_TOKEN");
-                                    for (int i = 0; i < purchaseDataList.size(); ++i) {
-                                        String purchaseData = purchaseDataList.get(i);
-                                        String signature = signatureList.get(i);
-                                        String sku = ownedSkus.get(i);
-                                        // do something with this purchase information
-                                        // e.g. display the updated list of products owned by user
-                                        skuToPurchasedItem.put(sku, new PurchasedItem(purchaseData, signature, sku));
-                                    }
-                                } else {
-                                    purchasedItemsListener.onServerError(ownedItems);
-                                }
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                                purchasedItemsListener.onError(e);
-                            }
-                        }
-                        // if continuationToken != null, call getPurchases again
-                        // and pass in the token to retrieve more items
+                        consumePurchaseListener.onSuccess();
                     } else {
-                        purchasedItemsListener.onServerError(ownedItems);
+                        consumePurchaseListener.onServerError(response);
                     }
                 } catch (RemoteException e) {
                     e.printStackTrace();
-                    purchasedItemsListener.onError(e);
+                    consumePurchaseListener.onError(e);
                 }
             }
         }).start();
     }
 
+    public void buySubscription(final String sku, final String developerPayload, final BuySubscriptionListener buySubscriptionListener){
+        this.buySubscriptionListener = buySubscriptionListener;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Bundle bundle = mService.getBuyIntent(3, getPackageName(),
+                            sku, "subs", developerPayload);
+                    PendingIntent pendingIntent = bundle.getParcelable("BUY_INTENT");
+                    if (bundle.getInt("RESPONSE_CODE") == 0) {
+                        // Start purchase flow (this brings up the Google Play UI).
+                        // Result will be delivered through onActivityResult().
+                        try {
+                            startIntentSenderForResult(pendingIntent.getIntentSender(), RC_SUBS_BUY, new Intent(),
+                                    Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
+                        } catch (IntentSender.SendIntentException e) {
+                            e.printStackTrace();
+                            buySubscriptionListener.onError(e);
+                        }
+                    } else {
+                        buySubscriptionListener.onServerError(bundle);
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    buySubscriptionListener.onError(e);
+                }
+            }
+        }).start();
+    }
+
+    public void getPurchasedSubscriptions(final PurchasedItemsListener purchasedItemsListener){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getPurchasedItems("subs", purchasedItemsListener);
+            }
+        }).start();
+    }
+
+    public void getPurchasedItems(String itemType, PurchasedItemsListener purchasedItemsListener){
+        try {
+            Bundle ownedItems = mService.getPurchases(3, getPackageName(), itemType, null);
+            int response = ownedItems.getInt("RESPONSE_CODE");
+            if (response == 0) {
+                ArrayList<String> ownedSkus = ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+                ArrayList<String>  purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+                ArrayList<String>  signatureList = ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
+                String continuationToken = ownedItems.getString("INAPP_CONTINUATION_TOKEN");
+                Map<String, PurchasedItem> skuToPurchasedItem = new HashMap<String, PurchasedItem>();
+                for (int i = 0; i < purchaseDataList.size(); ++i) {
+                    String purchaseData = purchaseDataList.get(i);
+                    String signature = signatureList.get(i);
+                    String sku = ownedSkus.get(i);
+                    // do something with this purchase information
+                    // e.g. display the updated list of products owned by user
+                    skuToPurchasedItem.put(sku, new PurchasedItem(purchaseData, signature, sku));
+                }
+                while (continuationToken != null){
+                    try {
+                        ownedItems = mService.getPurchases(3, getPackageName(), itemType, continuationToken);
+                        response = ownedItems.getInt("RESPONSE_CODE");
+                        if (response == 0) {
+                            ownedSkus = ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+                            purchaseDataList = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+                            signatureList = ownedItems.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
+                            continuationToken = ownedItems.getString("INAPP_CONTINUATION_TOKEN");
+                            for (int i = 0; i < purchaseDataList.size(); ++i) {
+                                String purchaseData = purchaseDataList.get(i);
+                                String signature = signatureList.get(i);
+                                String sku = ownedSkus.get(i);
+                                // do something with this purchase information
+                                // e.g. display the updated list of products owned by user
+                                skuToPurchasedItem.put(sku, new PurchasedItem(purchaseData, signature, sku));
+                            }
+                        } else {
+                            purchasedItemsListener.onServerError(ownedItems);
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        purchasedItemsListener.onError(e);
+                    }
+                }
+                // if continuationToken != null, call getPurchases again
+                // and pass in the token to retrieve more items
+            } else {
+                purchasedItemsListener.onServerError(ownedItems);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            purchasedItemsListener.onError(e);
+        }
+    }
 
 
 }
