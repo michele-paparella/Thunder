@@ -12,4 +12,5 @@
     <string name="device_not_connected">device is not connected</string>
     <string name="ip_not_available">IP not Available</string>
     <string name="google_analytics_problem">Problem with Google Analytics</string>
+
 </resources>

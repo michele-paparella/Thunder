@@ -16,8 +16,16 @@ package com.thunder.iap;
  * limitations under the License.
  */
 
-public abstract class IAPManager {
+import android.os.Bundle;
 
-    //TODO implement
+import org.json.JSONObject;
+
+public interface BuyItemListener {
+
+    public void onSuccess(JSONObject object);
+
+    public void onServerError(Bundle bundle);
+
+    public void onError(Exception e);
 
 }
