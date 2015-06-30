@@ -1,5 +1,3 @@
-Thunder
-========
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly. It contains the following modules out of the box:
 - app
 - crypto
@@ -28,6 +26,7 @@ If you need to include In-App Purchases (http://developer.android.com/google/pla
 
 log
 --------------
+TODO
 
 network
 --------------
@@ -39,10 +38,20 @@ This module allows you to have a single entry point that handle all common opera
 
 rating
 --------------
-It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the res/values/thunder_config.xml file
+It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the res/values/thunder_config.xml file.
+This is an example of the popup:
+
+![alt tag](doc/rating_popup.png)
+
+Important details
+========
+
+Compatibility
+--------------
+*Thunder* is compatible from Android API 13 (Android 3.2) and above
 
 Permissions
-========
+--------------
 In order to use Thunder, please be aware that the library uses the following permissions:
 
 - android.permission.READ_PHONE_STATE
