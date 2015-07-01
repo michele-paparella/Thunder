@@ -46,13 +46,17 @@ This is an example of the popup:
 Important details
 ========
 
+Sample project
+---------------
+In order to show how to integrate *Thunder* into your app, a sample project - *Thunder Sample* - has been published here https://github.com/michele-paparella/ThunderSample.
+
 Compatibility
---------------
+---------------
 *Thunder* is compatible from Android API 13 (Android 3.2) and above
 
 Permissions
---------------
-In order to use Thunder, please be aware that the library uses the following permissions:
+---------------
+In order to use *Thunder*, please be aware that the library uses the following permissions:
 
 - android.permission.READ_PHONE_STATE
 - android.permission.ACCESS_NETWORK_STATE
