@@ -17,6 +17,7 @@ package com.thunder.rating;
  */
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,14 +38,14 @@ public class RatingPopupImpl implements RatingPopup{
 
     private static RatingPopupListener ratingPopupListener;
     private static SharedPrefsManager sharedPrefsManager;
-    private static Context context;
+    private static Activity activity;
     private static RatingPopupImpl instance;
 
-    public static RatingPopupImpl getInstance(Context c, RatingPopupListener listener) {
+    public static RatingPopupImpl getInstance(Activity a, RatingPopupListener listener) {
         if (instance == null){
-            context = c;
+            activity = a;
             ratingPopupListener = listener;
-            sharedPrefsManager = new SharedPrefsManager(context, PREFS_NAME, Context.MODE_PRIVATE);
+            sharedPrefsManager = new SharedPrefsManager(activity, PREFS_NAME, Context.MODE_PRIVATE);
             instance = new RatingPopupImpl();
         }
         return instance;
@@ -61,16 +62,20 @@ public class RatingPopupImpl implements RatingPopup{
             sharedPrefsManager.incrementSync(CURRENT_RATING_POPUP, 0, 1);
             if (sharedPrefsManager.getBoolean(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, true) &&
                     sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == getConfigurationValue(R.integer.first_rating_popup)) {
-                sharedPrefsManager.putBooleanSync(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, false);
-                showRateDialog();
+                if (!activity.isFinishing()) {
+                    sharedPrefsManager.putBooleanSync(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, false);
+                    showRateDialog();
+                }
             }else if (sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == sharedPrefsManager.getInt(NEXT_RATING_POPUP, -1)) {
-                showRateDialog();
+                if (!activity.isFinishing()) {
+                    showRateDialog();
+                }
             }
         }
     }
 
     private int getConfigurationValue(int id){
-        return context.getResources().getInteger(id);
+        return activity.getResources().getInteger(id);
     }
 
     /**
@@ -79,16 +84,16 @@ public class RatingPopupImpl implements RatingPopup{
      */
     public void showRateDialog() {
         //TODO support multiple languages
-        //AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT);
+        //AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle(R.string.rating_dialog_title);
         builder.setMessage(R.string.rating_dialog_message);
         builder.setPositiveButton(R.string.rating_dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String appPackage = context.getPackageName();
+                String appPackage = activity.getPackageName();
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackage));
-                context.startActivity(intent);
+                activity.startActivity(intent);
                 //it will never show the popup
                 sharedPrefsManager.putIntSync(CURRENT_RATING_POPUP, -1);
                 if (ratingPopupListener != null) {

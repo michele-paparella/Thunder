@@ -226,4 +226,7 @@ public class DeviceManager {
         return Build.HARDWARE;
     }
 
+    public static String getHardwareSerialNumber() {
+        return Build.SERIAL;
+    }
 }
