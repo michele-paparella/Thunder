@@ -185,4 +185,45 @@ public class DeviceManager {
         return tMgr.getDeviceId();
     }
 
+    public static String getBoardName(){
+        return Build.BOARD;
+    }
+
+    public static String getBuildFingerprint(){
+        return Build.FINGERPRINT;
+    }
+
+    public static String getBootloaderVersionNumber(){
+        return Build.BOOTLOADER;
+    }
+
+    public static String getBrand(){
+        return Build.BRAND;
+    }
+
+    public static String getCpuAbi(Context context){
+        if (Build.VERSION.SDK_INT >= 21){
+            String[] abis = Build.SUPPORTED_ABIS;
+            if (abis != null && abis.length > 0) {
+                return abis[0];
+            } else {
+                return context.getString(R.string.cpu_abi_not_available);
+            }
+        } else {
+            return Build.CPU_ABI;
+        }
+    }
+
+    public static String getIndustrialDeviceName(){
+        return Build.DEVICE;
+    }
+
+    public static String getBuildId(){
+        return Build.DISPLAY;
+    }
+
+    public static String getHardwareName(){
+        return Build.HARDWARE;
+    }
+
 }

@@ -16,12 +16,8 @@ package com.thunder.rating;
  * limitations under the License.
  */
 
-import android.content.Context;
-
 public interface RatingPopup {
 
     public void onResume();
-
-    public void setRatingPopupListener(RatingPopupListener listener);
 
 }

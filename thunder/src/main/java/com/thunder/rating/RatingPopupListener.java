@@ -18,7 +18,7 @@ package com.thunder.rating;
 
 public interface RatingPopupListener {
 
-    public void onShow();
+    public void onRatingShow();
 
     public void onRatingOk();
 

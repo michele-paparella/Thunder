@@ -17,8 +17,10 @@ package com.thunder.app;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 
 import com.thunder.R;
 import com.thunder.exception.DataNotAvailableException;
@@ -53,6 +55,18 @@ public class AppManager {
 
     public static String getPackage(Context context){
         return context.getPackageName();
+    }
+
+    public static void startEmailIntent(Context context, String address, String subject, String text){
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
+                Uri.fromParts("mailto", address, null));
+        if (subject != null && !subject.isEmpty()) {
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        }
+        if (text != null && !text.isEmpty()) {
+            emailIntent.putExtra(Intent.EXTRA_TEXT, text);
+        }
+        context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.chooser_email_title)));
     }
 
 }

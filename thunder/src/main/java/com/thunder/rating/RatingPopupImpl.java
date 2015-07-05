@@ -17,20 +17,15 @@ package com.thunder.rating;
  */
 
 
-
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 
 import com.thunder.R;
 import com.thunder.prefs.SharedPrefsManager;
 
-/**
- *
- */
-//TODO test
 public class RatingPopupImpl implements RatingPopup{
 
 
@@ -78,18 +73,14 @@ public class RatingPopupImpl implements RatingPopup{
         return context.getResources().getInteger(id);
     }
 
-    @Override
-    public void setRatingPopupListener(RatingPopupListener listener) {
-        this.ratingPopupListener = listener;
-    }
-
     /**
      * Show the rate dialog
      *
      */
     public void showRateDialog() {
         //TODO support multiple languages
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        //AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle(R.string.rating_dialog_title);
         builder.setMessage(R.string.rating_dialog_message);
         builder.setPositiveButton(R.string.rating_dialog_ok, new DialogInterface.OnClickListener() {
@@ -135,6 +126,9 @@ public class RatingPopupImpl implements RatingPopup{
                 }
             }
         });
+        if (ratingPopupListener != null){
+            ratingPopupListener.onRatingShow();
+        }
         builder.create().show();
     }
 
