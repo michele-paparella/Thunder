@@ -45,7 +45,7 @@ public class NetworkManager {
      * @param times
      * @param listener
      */
-    public static void ping(final String host, final int times, final OnPingResultAvailable listener) {
+    public static void ping(final String host, final int times, final OnResultListener listener) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -60,7 +60,7 @@ public class NetworkManager {
 
     }
 
-    private static void performPingRequest(String host, int times, OnPingResultAvailable listener) throws IOException, InterruptedException {
+    private static void performPingRequest(String host, int times, OnResultListener listener) throws IOException, InterruptedException {
         StringBuffer echo = new StringBuffer();
         Process proc = Runtime.getRuntime().exec("ping -c " + times + " " + host);
         InputStreamReader reader = null;
@@ -94,7 +94,7 @@ public class NetworkManager {
         }
     }
 
-    public interface OnPingResultAvailable {
+    public interface OnResultListener {
 
         public void onPartialResult(final String result);
 
@@ -190,5 +190,53 @@ public class NetworkManager {
         throw new DataNotAvailableException(context.getString(R.string.ip_not_available));
     }
 
+    public static void traceroute(final String host, final OnResultListener listener) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    performTracerouteRequest(host, listener);
+                } catch (Exception e) {
+                    listener.onError(e);
+                }
+            }};
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+
+    private static void performTracerouteRequest(String host, OnResultListener listener) throws IOException, InterruptedException {
+        StringBuffer echo = new StringBuffer();
+        String[] cmdarray = { "nmap", "--traceroute", host };
+        Process proc = Runtime.getRuntime().exec(cmdarray);
+        InputStreamReader reader = null;
+        BufferedReader buffer = null;
+        try {
+            reader = new InputStreamReader(proc.getInputStream());
+            buffer = new BufferedReader(reader);
+            String newLine = "\n";
+            String line = "";
+            while ((line = buffer.readLine()) != null) {
+                echo.append(line + newLine);
+                listener.onPartialResult(line + newLine);
+            }
+            proc.waitFor();
+            int exit = proc.exitValue();
+            if (exit == 0) {
+                listener.onFinish();
+            } else {
+                listener.onError(new Exception("Error during Traceroute"));
+            }
+        } finally {
+            if (reader != null){
+                reader.close();
+            }
+            if (buffer != null){
+                buffer.close();
+            }
+            if (proc != null){
+                proc.destroy();
+            }
+        }
+    }
 
 }
