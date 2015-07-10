@@ -190,6 +190,12 @@ public class NetworkManager {
         throw new DataNotAvailableException(context.getString(R.string.ip_not_available));
     }
 
+    /**
+     * WARNING: traceroute needs root permission
+     * @param host
+     * @param listener
+     */
+    @Deprecated
     public static void traceroute(final String host, final OnResultListener listener) {
         Runnable runnable = new Runnable() {
             @Override
@@ -204,10 +210,17 @@ public class NetworkManager {
         thread.start();
     }
 
+    /**
+     * WARNING: traceroute needs root permission
+     * @param host
+     * @param listener
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    @Deprecated
     private static void performTracerouteRequest(String host, OnResultListener listener) throws IOException, InterruptedException {
         StringBuffer echo = new StringBuffer();
-        String[] cmdarray = { "nmap", "--traceroute", host };
-        Process proc = Runtime.getRuntime().exec(cmdarray);
+        Process proc = Runtime.getRuntime().exec("traceroute " + host);
         InputStreamReader reader = null;
         BufferedReader buffer = null;
         try {

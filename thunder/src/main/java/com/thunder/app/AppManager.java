@@ -16,11 +16,13 @@ package com.thunder.app;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.view.inputmethod.InputMethodManager;
 
 import com.thunder.R;
 import com.thunder.exception.DataNotAvailableException;
@@ -67,6 +69,19 @@ public class AppManager {
             emailIntent.putExtra(Intent.EXTRA_TEXT, text);
         }
         context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.chooser_email_title)));
+    }
+
+    public static void startShareIntent(Context context, String textData){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, textData);
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 }
