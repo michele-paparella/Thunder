@@ -154,6 +154,4 @@ public class NetworkManager {
         command.runCommand(host, listener);
     }
 
-
-
 }

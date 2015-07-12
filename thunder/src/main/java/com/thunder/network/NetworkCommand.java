@@ -22,12 +22,16 @@ import java.io.InputStreamReader;
 public abstract class NetworkCommand {
 
     private static String command;
+    protected OnPartialResultListener listener;
+    protected String domain;
 
     public NetworkCommand(String command){
         this.command = command;
     }
 
     public void runCommand(final String host, final OnPartialResultListener listener) {
+        this.listener = listener;
+        this.domain = host;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -64,11 +68,25 @@ public abstract class NetworkCommand {
                         }
                     }
                 } catch (Exception e) {
-                    listener.onError(e);
+                    if (hasFallback()){
+                        performFallback();
+                    } else {
+                        listener.onError(e);
+                    }
                 }
             }};
         Thread thread = new Thread(runnable);
         thread.start();
+    }
+
+    //try to use another way to obtain data
+    public boolean hasFallback(){
+        //standard behavior
+        return false;
+    }
+
+    public void performFallback(){
+
     }
 
 }

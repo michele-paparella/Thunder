@@ -22,4 +22,13 @@ public class NsLookupCommand extends NetworkCommand {
         super("nslookup");
     }
 
+    @Override
+    public boolean hasFallback() {
+        return true;
+    }
+
+    @Override
+    public void performFallback() {
+        new Thread(new NsLookupTask(domain, listener)).start();
+    }
 }

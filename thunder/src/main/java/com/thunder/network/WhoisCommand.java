@@ -38,6 +38,7 @@ public class WhoisCommand extends NetworkCommand {
                     String whoisData1 = whois.query("=" + host);
                     result.append(whoisData1);
                     listener.onPartialResult(result.toString());
+                    listener.onFinish();
                     whois.disconnect();
                 } catch (IOException e) {
                     e.printStackTrace();
