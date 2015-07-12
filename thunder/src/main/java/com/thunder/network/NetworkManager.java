@@ -24,9 +24,6 @@ import android.util.Log;
 import com.thunder.R;
 import com.thunder.exception.DataNotAvailableException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -38,71 +35,6 @@ import java.util.List;
 public class NetworkManager {
 
     private final static String TAG = "NetworkManager";
-
-    /**
-     * WARNING: do not call this method from the main thread
-     * @param host
-     * @param times
-     * @param listener
-     */
-    public static void ping(final String host, final int times, final OnResultListener listener) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    performPingRequest(host, times, listener);
-                } catch (Exception e) {
-                    listener.onError(e);
-            }
-        }};
-        Thread thread = new Thread(runnable);
-        thread.start();
-
-    }
-
-    private static void performPingRequest(String host, int times, OnResultListener listener) throws IOException, InterruptedException {
-        StringBuffer echo = new StringBuffer();
-        Process proc = Runtime.getRuntime().exec("ping -c " + times + " " + host);
-        InputStreamReader reader = null;
-        BufferedReader buffer = null;
-        try {
-            reader = new InputStreamReader(proc.getInputStream());
-            buffer = new BufferedReader(reader);
-            String newLine = "\n";
-            String line = "";
-            while ((line = buffer.readLine()) != null) {
-                echo.append(line + newLine);
-                listener.onPartialResult(line + newLine);
-            }
-            proc.waitFor();
-            int exit = proc.exitValue();
-            if (exit == 0) {
-                listener.onFinish();
-            } else {
-                listener.onError(new Exception("Error during PING"));
-            }
-        } finally {
-            if (reader != null){
-                reader.close();
-            }
-            if (buffer != null){
-                buffer.close();
-            }
-            if (proc != null){
-                proc.destroy();
-            }
-        }
-    }
-
-    public interface OnResultListener {
-
-        public void onPartialResult(final String result);
-
-        public void onError(final Exception e);
-
-        public void onFinish();
-
-    }
 
     /**
      * @param context
@@ -191,65 +123,37 @@ public class NetworkManager {
     }
 
     /**
-     * WARNING: traceroute needs root permission
+     *
      * @param host
+     * @param times
      * @param listener
      */
-    @Deprecated
-    public static void traceroute(final String host, final OnResultListener listener) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    performTracerouteRequest(host, listener);
-                } catch (Exception e) {
-                    listener.onError(e);
-                }
-            }};
-        Thread thread = new Thread(runnable);
-        thread.start();
+    public static void ping(final String host, final int times, final OnPartialResultListener listener) {
+        NetworkCommand command = new PingCommand(times);
+        command.runCommand(host, listener);
     }
 
     /**
      * WARNING: traceroute needs root permission
      * @param host
      * @param listener
-     * @throws IOException
-     * @throws InterruptedException
      */
     @Deprecated
-    private static void performTracerouteRequest(String host, OnResultListener listener) throws IOException, InterruptedException {
-        StringBuffer echo = new StringBuffer();
-        Process proc = Runtime.getRuntime().exec("traceroute " + host);
-        InputStreamReader reader = null;
-        BufferedReader buffer = null;
-        try {
-            reader = new InputStreamReader(proc.getInputStream());
-            buffer = new BufferedReader(reader);
-            String newLine = "\n";
-            String line = "";
-            while ((line = buffer.readLine()) != null) {
-                echo.append(line + newLine);
-                listener.onPartialResult(line + newLine);
-            }
-            proc.waitFor();
-            int exit = proc.exitValue();
-            if (exit == 0) {
-                listener.onFinish();
-            } else {
-                listener.onError(new Exception("Error during Traceroute"));
-            }
-        } finally {
-            if (reader != null){
-                reader.close();
-            }
-            if (buffer != null){
-                buffer.close();
-            }
-            if (proc != null){
-                proc.destroy();
-            }
-        }
+    public static void traceroute(final String host, final OnPartialResultListener listener) {
+        NetworkCommand command = new TracerouteCommand();
+        command.runCommand(host, listener);
     }
+
+    /**
+     *
+     * @param host
+     * @param listener
+     */
+    public static void nsLookup(final String host, final OnPartialResultListener listener) {
+        NetworkCommand command = new NsLookupCommand();
+        command.runCommand(host, listener);
+    }
+
+
 
 }

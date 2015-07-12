@@ -20,9 +20,14 @@ import org.apache.commons.net.whois.WhoisClient;
 
 import java.io.IOException;
 
-public class Whois {
+public class WhoisCommand extends NetworkCommand {
 
-    public static void getWhois(final String domain, final WhoisListener callback){
+    public WhoisCommand(){
+        super("whois");
+    }
+
+    @Override
+    public void runCommand(final String host, final OnPartialResultListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -30,25 +35,17 @@ public class Whois {
                 WhoisClient whois = new WhoisClient();
                 try {
                     whois.connect(WhoisClient.DEFAULT_HOST);
-                    String whoisData1 = whois.query("=" + domain);
+                    String whoisData1 = whois.query("=" + host);
                     result.append(whoisData1);
-                    callback.onSuccess(result.toString());
+                    listener.onPartialResult(result.toString());
                     whois.disconnect();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    callback.onError(e);
+                    listener.onError(e);
                 }
 
             }
         }).start();
-    }
-
-    public interface WhoisListener {
-
-        public void onSuccess(String whoisData);
-
-        public void onError(Exception e);
-
     }
 
 }
