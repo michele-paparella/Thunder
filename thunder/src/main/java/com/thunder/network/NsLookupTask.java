@@ -16,6 +16,8 @@ package com.thunder.network;
  * limitations under the License.
  */
 
+import android.text.Html;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -34,10 +36,11 @@ public class NsLookupTask implements Runnable {
         try {
             InetAddress ipAddresses[] = InetAddress.getAllByName(domain);
             StringBuffer strbuf = new StringBuffer("");
+            String separator = "<br>";
             for(int i = 0; i < ipAddresses.length; i++){
-                strbuf.append(ipAddresses[i].getHostAddress()+";");
+                strbuf.append(ipAddresses[i].getHostAddress()+separator);
             }
-            listener.onPartialResult(strbuf.toString());
+            listener.onPartialResult(Html.fromHtml(strbuf.toString()).toString());
             listener.onFinish();
         } catch(UnknownHostException e){
             listener.onError(e);
