@@ -2,10 +2,10 @@
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly.
 
 ##  Download
-You can grab the [**last version**](releases/download/2.0_release/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](README.md#library-setup).
+You can grab the [**last version**](https://github.com/michele-paparella/Thunder/releases/download/2.0_release/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](README.md#library-setup).
 
 ## Modules
-The library has been designed with one important goal: make the developer life easier with a bunch of useful classes. The available modules in the last version of *Thunder* are following:
+The library is really lightweight (~70kb) has been designed with one important goal: make the developer life easier with a bunch of useful classes. The available modules in the last version of *Thunder* are following:
 
 - [App](README.md#app)
 - [Crypto](README.md#crypto)
@@ -13,7 +13,7 @@ The library has been designed with one important goal: make the developer life e
 - [IAP](README.md#iap-in-app-purchases)
 - [Network](README.md#network)
 - [Prefs](README.md#prefs)
-- [Rating](README.md#Rating)
+- [Rating](README.md#rating)
 
 ### App
 This module is designed to gives you the chance of getting related data of your app (e.g. version code) through a simple class - [*AppManager*](thunder/src/main/java/com/thunder/app/AppManager.java). It allows, also, to send an email or to start an intent for sharing text with only one line of code (check the methods *startEmailIntent* or *startShareIntent*).
@@ -31,9 +31,9 @@ If you need to include [*In-App Purchases*](http://developer.android.com/google/
 A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
 
 - ping - [*PingCommand*](thunder/src/main/java/com/thunder/network/PingCommand.java)
-- traceroute [*TracerouteCommand*](thunder/src/main/java/com/thunder/network/TracerouteCommand.java)
-- nsLookup [*NsLookupCommand*](thunder/src/main/java/com/thunder/network/NsLookupCommand.java)
-- whois [*WhoisCommand*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
+- traceroute - [*TracerouteCommand*](thunder/src/main/java/com/thunder/network/TracerouteCommand.java)
+- nsLookup - [*NsLookupCommand*](thunder/src/main/java/com/thunder/network/NsLookupCommand.java)
+- whois - [*WhoisCommand*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
 
 ### Prefs
 This module allows you to have a single entry point that handle all common operations on [*SharedPreferences*](http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit. If you want to discover more, please see the class [*SharedPrefsManager*](thunder/src/main/java/com/thunder/prefs/SharedPrefsManager.java).
@@ -110,7 +110,7 @@ This is an example of the popup:
 ## Important details
 
 ### Library setup
-To use the library, first download the last *aar* (go at the top of this page). Now you can insert, into the *build.gradle* file at the level of your module (NOT the project-level one) the following instructions:
+To use the library, first download the last [*aar*](README.md#download). Now you can insert, into the *build.gradle* file at the level of your module (NOT the project-level one) the following instructions:
 
 	dependencies {
     	compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -126,7 +126,7 @@ To use the library, first download the last *aar* (go at the top of this page). 
 	
 For additional help visit this [stackoverflow question](http://stackoverflow.com/questions/16682847/how-to-manually-include-external-aar-package-using-new-gradle-android-build-syst). 
 
-### Sample project
+###Sample project
 In order to figure out how to integrate *Thunder* into your app, a sample project has been published - [*thunder-sample*](thunder-sample).
 
 ### Compatibility
