@@ -25,7 +25,7 @@ It contains the most famous hashing algorithms, such as *MD2, MD5, SHA-1, SHA-25
 This module provides useful data about your physical device, e.g. screen resolution, OS version, free space or available RAM - check the class [*DeviceManager*](thunder/src/main/java/com/thunder/device/DeviceManager.java) for other details.
 
 ### IAP (In-App Purchases)
-If you need to include [*In-App Purchases*](http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both *In-app items* & *Subscriptions* in a glance!
+If you need to include [In-App Purchases](http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both *In-app items* & *Subscriptions* in a glance has been implemented: [*IAPActivity*](thunder/src/main/java/com/thunder/iap/IAPActivity.java) - you just have to extend this class in your project.
 
 ### Network
 A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
@@ -36,7 +36,7 @@ A module that helps a lot for network related operations (for example checking i
 - whois - [*WhoisCommand*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
 
 ### Prefs
-This module allows you to have a single entry point that handle all common operations on [*SharedPreferences*](http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit. If you want to discover more, please see the class [*SharedPrefsManager*](thunder/src/main/java/com/thunder/prefs/SharedPrefsManager.java).
+This module allows you to have a single entry point that handle all common operations on [SharedPreferences](http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit. If you want to discover more, please see the class [*SharedPrefsManager*](thunder/src/main/java/com/thunder/prefs/SharedPrefsManager.java).
 
 ### Rating
 It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the *res/values/thunder_config.xml* file. In order to use this popup, the first step is to declare your custom RatingPopupListener:
