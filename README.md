@@ -52,7 +52,9 @@ Rating
 --------------
 It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the *res/values/thunder_config.xml* file. In order to use this popup, the first step is to declare your custom RatingPopupListener:
 
-	public class CustomRatingPopupListener implements com.thunder.rating.RatingPopupListener {
+	import com.thunder.rating.RatingPopupListener;
+
+	public class CustomRatingPopupListener implements RatingPopupListener {
 
   	  	@Override
   	  	public void onRatingShow() {
