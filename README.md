@@ -12,7 +12,7 @@ Thunder 2.0
 
 Download
 ==============
-You can grab the last version [**HERE**] in the *aar* format
+You can grab the [**last version**](build/outputs/aar/thunder-release.aar) in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a tutorial.
 
 
 Modules 
@@ -37,7 +37,7 @@ If you need to include [*In-App Purchases*](http://developer.android.com/google/
 
 Network
 --------------
-A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager.java*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
+A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
 
 - ping - [*PingCommand.java*](thunder/src/main/java/com/thunder/network/PingCommand.java)
 - traceroute [*TracerouteCommand.java*](thunder/src/main/java/com/thunder/network/TracerouteCommand.java)
@@ -120,6 +120,24 @@ This is an example of the popup:
 
 Important details
 ========
+
+Library setup
+---------------
+To use the library, first download the last *aar* (go at the top of this page). Now you can insert, into the *build.gradle* file at the level of your module (NOT the project-level one) the following instructions:
+
+	dependencies {
+    	compile fileTree(dir: 'libs', include: ['*.jar'])
+    	compile 'com.android.support:appcompat-v7:22.2.0'
+    	compile(name:'thunder-release', ext:'aar')
+	}
+	
+	repositories{
+    	flatDir{
+       		dirs 'libs'
+    	}
+	}
+	
+
 
 Sample project
 ---------------
