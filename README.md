@@ -1,3 +1,5 @@
+Thunder - v. 2.0
+-------------
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly. It contains the following modules out of the box:
 - app
 - crypto
@@ -33,7 +35,33 @@ This module allows you to have a single entry point that handle all common opera
 
 rating
 --------------
-It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the res/values/thunder_config.xml file.
+It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the res/values/thunder_config.xml file. The important values are:
+
+- *first_rating_popup*: the number of times that the app goes to the RatingPopupImpl onResume method before showing the rating popup for the first time (after an install) - default 2 
+- *negative_rating_popup*: the number of times that the app goes to the RatingPopupImpl onResume method before showing the rating popup after a user cancelled the popup - default 2
+- *neutral_rating_popup*: the number of times that the app goes to the RatingPopupImpl onResume method before showing the rating popup after a user taps on the neutral button - default 1
+
+To override these values, simply create a new file *thunder_config.xml* in res/values and declare the new values, e.g.:
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+
+    <!-- Popup Panel configuration values beginning -->
+    <!-- first_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
+    the rating popup for the first time (after an install) -->
+    <integer name="first_rating_popup">2</integer>
+    <!-- negative_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
+    the rating popup after a user cancelled the popup -->
+    <integer name="negative_rating_popup">2</integer>
+    <!-- neutral_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
+    the rating popup after a user taps on the neutral button -->
+    <integer name="neutral_rating_popup">1</integer>
+
+    <!-- Popup Panel configuration values end -->
+
+
+	</resources>
+
 This is an example of the popup:
 
 ![alt tag](doc/rating_popup.png)
