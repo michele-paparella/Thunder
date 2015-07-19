@@ -123,7 +123,7 @@ Important details
 
 Sample project
 ---------------
-In order to figure out how to integrate *Thunder* into your app, a sample project has been published - [*Thunder Sample*](https://github.com/michele-paparella/ThunderSample).
+In order to figure out how to integrate *Thunder* into your app, a sample project has been published - [*thunder-sample*](thunder-sample).
 
 Compatibility
 ---------------
