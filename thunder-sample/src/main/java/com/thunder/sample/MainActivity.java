@@ -1,14 +1,17 @@
 package com.thunder.sample;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.thunder.rating.RatingPopupImpl;
+import com.thunder.rating.RatingPopupListener;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private RatingPopupListener popupListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        RatingPopupImpl.getInstance(this, null).onResume();
+        if (popupListener == null){
+            //we don't need to build the listener every time
+            popupListener = new CustomRatingPopupListener();
+        }
+        RatingPopupImpl.getInstance(this, popupListener).onResume();
     }
 
     @Override

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Popup Panel configuration values beginning -->
+    <!-- first_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
+    the rating popup for the first time (after an install) -->
+    <integer name="first_rating_popup">1</integer>
+    <!-- negative_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
+    the rating popup after a user cancelled the popup -->
+    <integer name="negative_rating_popup">1</integer>
+    <!-- neutral_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
+    the rating popup after a user taps on the neutral button -->
+    <integer name="neutral_rating_popup">1</integer>
+
+    <!-- Popup Panel configuration values end -->
+
+
+</resources>

@@ -1,1 +1,1 @@
-include ':thunder', ':thunderSample'
+include ':thunder', ':thunder-sample'
