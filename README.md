@@ -83,13 +83,16 @@ It provides a really simple way (only one line of code) for implementing a ratin
 
 and then override the onResume method of an Activity:
 
+	private RatingPopupListener popupListener;
+
 	@Override
     protected void onResume() {
         super.onResume();
-        if (listener == null){
-       		listener = new CustomRatingPopupListener();
+        if (popupListener == null){
+        	//we don't need to build the listener every time
+       		popupListener = new CustomRatingPopupListener();
         }
-        RatingPopupImpl.getInstance(this, listener).onResume();
+        RatingPopupImpl.getInstance(this, popupListener).onResume();
     }
 
 The important values are:
