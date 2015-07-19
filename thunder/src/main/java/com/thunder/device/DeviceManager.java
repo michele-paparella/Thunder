@@ -326,39 +326,40 @@ public class DeviceManager {
 
     public static FsData getAvailableSpaceOnExternalMemory(Context context){
         if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return getAvailableSpaceNewApi(context, Environment.getExternalStorageDirectory().getPath());
+            return getAvailableSpaceNewApi(Environment.getExternalStorageDirectory().getPath());
         } else {
-            return getAvailableSpaceOldApi(context, Environment.getExternalStorageDirectory().getPath());
+            return getAvailableSpaceOldApi(Environment.getExternalStorageDirectory().getPath());
         }
     }
 
     public static FsData getAvailableSpaceOnInternalMemory(Context context){
         if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return getAvailableSpaceNewApi(context, Environment.getDataDirectory().getPath());
+            return getAvailableSpaceNewApi(Environment.getDataDirectory().getPath());
         } else {
-            return getAvailableSpaceOldApi(context, Environment.getDataDirectory().getPath());
+            return getAvailableSpaceOldApi(Environment.getDataDirectory().getPath());
         }
     }
 
     /**
      * For target Api < 18
-     * @param context
      * @return
      */
-    private static FsData getAvailableSpaceOldApi(Context context, String path){
-        StatFs stat = new StatFs(path);
-        long availableSpace = (long)stat.getBlockSize() * (long)stat.getBlockCount();
-        long totalSpace = -1;
-        long usedSpace = -1;
-        double percentage = -1;
+    private static FsData getAvailableSpaceOldApi(String path){
+        StatFs statFs = new StatFs(path);
+        long blockSize = statFs.getBlockSize();
+        long availableSpace = statFs.getAvailableBlocks()*blockSize;
+        long totalSpace = statFs.getBlockCount()*blockSize;
+        long usedSpace = totalSpace - availableSpace;
+        double percentage = ((double) usedSpace)/ totalSpace;
         return new FsData(availableSpace, usedSpace, totalSpace, percentage);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private static FsData getAvailableSpaceNewApi(Context context, String path){
-        StatFs stat = new StatFs(path);
-        long availableSpace = stat.getBlockSizeLong() * stat.getBlockCountLong();
-        long totalSpace = stat.getTotalBytes();
+    private static FsData getAvailableSpaceNewApi(String path){
+        StatFs statFs = new StatFs(path);
+        long blockSize = statFs.getBlockSizeLong();
+        long availableSpace = statFs.getAvailableBlocksLong()*blockSize;
+        long totalSpace = statFs.getBlockCountLong()*blockSize;
         long usedSpace = totalSpace - availableSpace;
         double percentage = ((double) usedSpace)/ totalSpace;
         return new FsData(availableSpace, usedSpace, totalSpace, percentage);
@@ -412,13 +413,6 @@ public class DeviceManager {
         public void setPercentage(double percentage) {
             this.percentage = percentage;
         }
-
-        /**
-         * @return true if the clients should use only the @link availableSpace field, false otherwise
-         */
-        public boolean availableSpaceOnlyLoaded(){
-            return totalSpace == -1 && percentage == -1 && usedSpace == -1;
-        }
     }
 
     public static boolean deviceHasExternalStorage(){
@@ -427,6 +421,9 @@ public class DeviceManager {
 
     /* Checks if external storage is available to at least read */
     public static boolean isExternalStorageReadable() {
+        if (Environment.getExternalStorageDirectory().getPath().contains("emulated")){
+            return false;
+        }
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) ||
                 Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
