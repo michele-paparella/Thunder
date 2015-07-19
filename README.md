@@ -2,7 +2,7 @@
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly.
 
 ##  Download
-You can grab the [**last version**](thunder/build/outputs/aar/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](README.md#Library setup).
+You can grab the [**last version**](releases/download/2.0_release/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](README.md#library-setup).
 
 ## Modules
 The library has been designed with one important goal: make the developer life easier with a bunch of useful classes. The available modules in the last version of *Thunder* are following:
@@ -10,7 +10,7 @@ The library has been designed with one important goal: make the developer life e
 - [App](README.md#app)
 - [Crypto](README.md#crypto)
 - [Device](README.md#device)
-- [IAP](README.md#iap)
+- [IAP](README.md#iap-in-app-purchases)
 - [Network](README.md#network)
 - [Prefs](README.md#prefs)
 - [Rating](README.md#Rating)
@@ -24,16 +24,16 @@ It contains the most famous hashing algorithms, such as *MD2, MD5, SHA-1, SHA-25
 ### Device
 This module provides useful data about your physical device, e.g. screen resolution, OS version, free space or available RAM - check the class [*DeviceManager*](thunder/src/main/java/com/thunder/device/DeviceManager.java) for other details.
 
-### IAP
+### IAP (In-App Purchases)
 If you need to include [*In-App Purchases*](http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both *In-app items* & *Subscriptions* in a glance!
 
 ### Network
 A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
 
-- ping - [*PingCommand.java*](thunder/src/main/java/com/thunder/network/PingCommand.java)
-- traceroute [*TracerouteCommand.java*](thunder/src/main/java/com/thunder/network/TracerouteCommand.java)
-- nsLookup [*NsLookupCommand.java*](thunder/src/main/java/com/thunder/network/NsLookupCommand.java)
-- whois [*WhoisCommand.java*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
+- ping - [*PingCommand*](thunder/src/main/java/com/thunder/network/PingCommand.java)
+- traceroute [*TracerouteCommand*](thunder/src/main/java/com/thunder/network/TracerouteCommand.java)
+- nsLookup [*NsLookupCommand*](thunder/src/main/java/com/thunder/network/NsLookupCommand.java)
+- whois [*WhoisCommand*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
 
 ### Prefs
 This module allows you to have a single entry point that handle all common operations on [*SharedPreferences*](http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit. If you want to discover more, please see the class [*SharedPrefsManager*](thunder/src/main/java/com/thunder/prefs/SharedPrefsManager.java).
@@ -124,7 +124,7 @@ To use the library, first download the last *aar* (go at the top of this page). 
     	}
 	}
 	
-
+For additional help visit this [stackoverflow question](http://stackoverflow.com/questions/16682847/how-to-manually-include-external-aar-package-using-new-gradle-android-build-syst). 
 
 ### Sample project
 In order to figure out how to integrate *Thunder* into your app, a sample project has been published - [*thunder-sample*](thunder-sample).
