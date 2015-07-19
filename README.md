@@ -35,30 +35,64 @@ This module allows you to have a single entry point that handle all common opera
 
 rating
 --------------
-It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the res/values/thunder_config.xml file. The important values are:
+It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the *res/values/thunder_config.xml* file. In order to use this popup, the first step is to declare your custom RatingPopupListener:
+
+	public class CustomRatingPopupListener implements com.thunder.rating.RatingPopupListener {
+
+  	  @Override
+  	  public void onRatingShow() {
+  	      //the user sees the popup
+  	  }
+
+    @Override
+    public void onRatingOk() {
+        //the user wants to rate your app :)
+    }
+
+    @Override
+    public void onRatingCancel() {
+        //the user cancelled the popup (e.g. throught onBackPressed)
+    }
+
+    @Override
+    public void onRatingLater() {
+        //the user pressed the "later" button
+    }
+
+    @Override
+    public void onRatingNo() {
+        //the user pressed the "never" button
+    }
+
+	}
+
+and then override the onResume method of an Activity:
+
+	    @Override
+    	protected void onResume() {
+        super.onResume();
+        if (listener == null){
+            listener = new CustomRatingPopupListener();
+        }
+        RatingPopupImpl.getInstance(this, listener).onResume();
+    }
+
+The important values are:
 
 - *first_rating_popup*: the number of times that the app goes to the RatingPopupImpl onResume method before showing the rating popup for the first time (after an install) - default 2 
 - *negative_rating_popup*: the number of times that the app goes to the RatingPopupImpl onResume method before showing the rating popup after a user cancelled the popup - default 2
 - *neutral_rating_popup*: the number of times that the app goes to the RatingPopupImpl onResume method before showing the rating popup after a user taps on the neutral button - default 1
 
-To override these values, simply create a new file *thunder_config.xml* in res/values and declare the new values, e.g.:
+To override these values, simply create a new file **thunder_config.xml** in *res/values* and declare the new values, e.g.:
 
 	<?xml version="1.0" encoding="utf-8"?>
 	<resources>
 
-    <!-- Popup Panel configuration values beginning -->
-    <!-- first_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
-    the rating popup for the first time (after an install) -->
-    <integer name="first_rating_popup">2</integer>
-    <!-- negative_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
-    the rating popup after a user cancelled the popup -->
-    <integer name="negative_rating_popup">2</integer>
-    <!-- neutral_rating_popup is the number of times that the app goes to the RatingPopupImpl onResume method before showing
-    the rating popup after a user taps on the neutral button -->
-    <integer name="neutral_rating_popup">1</integer>
+    	<integer name="first_rating_popup">2</integer>
 
-    <!-- Popup Panel configuration values end -->
+    	<integer name="negative_rating_popup">2</integer>
 
+   		<integer name="neutral_rating_popup">1</integer>
 
 	</resources>
 
@@ -84,6 +118,7 @@ In order to use *Thunder*, please be aware that the library uses the following p
 - android.permission.READ_PHONE_STATE
 - android.permission.ACCESS_NETWORK_STATE
 - android.permission.INTERNET
+- android.permission.READ_EXTERNAL_STORAGE
 - com.android.vending.BILLING
 
 License
