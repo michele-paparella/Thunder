@@ -1,12 +1,10 @@
 #Thunder
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly.
 
-#Download
+# Download
 You can grab the [**last version**](thunder/build/outputs/aar/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](readme.md#App).
 
-##Modules
-The library has been designed with one important goal: make the developer life easier with a bunch of useful classes. The available modules in the last version of *Thunder* are following:
-
+## Modules
 - [App](#App)
 - [Crypto](#crypto)
 - Device
@@ -15,7 +13,7 @@ The library has been designed with one important goal: make the developer life e
 - Prefs
 - [Rating](#Rating)
 
-###App
+### App
 This module is designed to gives you the chance of getting related data of your app (e.g. version code) through a simple class - [*AppManager*](thunder/src/main/java/com/thunder/app/AppManager.java). It allows, also, to send an email or to start an intent for sharing text with only one line of code (check the methods *startEmailIntent* or *startShareIntent*).
 
 Crypto
@@ -43,7 +41,7 @@ Prefs
 --------------
 This module allows you to have a single entry point that handle all common operations on [*SharedPreferences*](http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit. If you want to discover more, please see the class [*SharedPrefsManager*](thunder/src/main/java/com/thunder/prefs/SharedPrefsManager.java).
 
-###Rating
+### Rating
 It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the *res/values/thunder_config.xml* file. In order to use this popup, the first step is to declare your custom RatingPopupListener:
 
 	import com.thunder.rating.RatingPopupListener;
