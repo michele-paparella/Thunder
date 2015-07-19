@@ -1,35 +1,33 @@
-#Thunder
+# Thunder
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly.
 
-# Download
-You can grab the [**last version**](thunder/build/outputs/aar/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](readme.md#App).
+##  Download
+You can grab the [**last version**](thunder/build/outputs/aar/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](README.md#App).
 
 ## Modules
+The library has been designed with one important goal: make the developer life easier with a bunch of useful classes. The available modules in the last version of *Thunder* are following:
+
 - [App](#App)
 - [Crypto](#crypto)
-- Device
-- IAP
-- Network
-- Prefs
+- [Device](#device)
+- [IAP](#iap)
+- [Network](#network)
+- [Prefs](#prefs)
 - [Rating](#Rating)
 
 ### App
 This module is designed to gives you the chance of getting related data of your app (e.g. version code) through a simple class - [*AppManager*](thunder/src/main/java/com/thunder/app/AppManager.java). It allows, also, to send an email or to start an intent for sharing text with only one line of code (check the methods *startEmailIntent* or *startShareIntent*).
 
-Crypto
---------------
+### Crypto
 It contains the most famous hashing algorithms, such as *MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512*. You can use this module through the class [*CryptoHelper*](thunder/src/main/java/com/thunder/crypto/CryptoHelper.java).
 
-Device
---------------
+### Device
 This module provides useful data about your physical device, e.g. screen resolution, OS version, free space or available RAM - check the class [*DeviceManager*](thunder/src/main/java/com/thunder/device/DeviceManager.java) for other details.
 
-IAP (In-App Purchases)
---------------
+### IAP
 If you need to include [*In-App Purchases*](http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both *In-app items* & *Subscriptions* in a glance!
 
-Network
---------------
+### Network
 A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
 
 - ping - [*PingCommand.java*](thunder/src/main/java/com/thunder/network/PingCommand.java)
@@ -37,8 +35,7 @@ A module that helps a lot for network related operations (for example checking i
 - nsLookup [*NsLookupCommand.java*](thunder/src/main/java/com/thunder/network/NsLookupCommand.java)
 - whois [*WhoisCommand.java*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
 
-Prefs
---------------
+### Prefs
 This module allows you to have a single entry point that handle all common operations on [*SharedPreferences*](http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit. If you want to discover more, please see the class [*SharedPrefsManager*](thunder/src/main/java/com/thunder/prefs/SharedPrefsManager.java).
 
 ### Rating
@@ -110,11 +107,9 @@ This is an example of the popup:
 
 ![alt tag](doc/rating_popup.png)
 
-Important details
-========
+## Important details
 
-Library setup
----------------
+### Library setup
 To use the library, first download the last *aar* (go at the top of this page). Now you can insert, into the *build.gradle* file at the level of your module (NOT the project-level one) the following instructions:
 
 	dependencies {
@@ -131,16 +126,13 @@ To use the library, first download the last *aar* (go at the top of this page). 
 	
 
 
-Sample project
----------------
+### Sample project
 In order to figure out how to integrate *Thunder* into your app, a sample project has been published - [*thunder-sample*](thunder-sample).
 
-Compatibility
----------------
+### Compatibility
 *Thunder* is compatible from Android API 13 (Android 3.2) and above
 
-Permissions
----------------
+### Permissions
 In order to use *Thunder*, please be aware that the library uses the following permissions:
 
 - *android.permission.READ_PHONE_STATE*
@@ -149,8 +141,7 @@ In order to use *Thunder*, please be aware that the library uses the following p
 - *android.permission.READ_EXTERNAL_STORAGE*
 - *com.android.vending.BILLING*
 
-License
-==============
+### License
 	Copyright 2015 Michele Paparella
 
 	Licensed under the Apache License, Version 2.0 (the "License");
