@@ -16,9 +16,13 @@ package com.thunder.device;
  * limitations under the License.
  */
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -229,4 +233,207 @@ public class DeviceManager {
     public static String getHardwareSerialNumber() {
         return Build.SERIAL;
     }
+
+    public static RamData getAvailableRam(Context context){
+        if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN) {
+            return getAvailableRamNewApi(context);
+        } else {
+            return getAvailableRamOldApi(context);
+        }
+    }
+
+    /**
+     * for Api < 16
+     * @param context
+     * @return @link RamData object with only availableMemory. Other fields, such as totalMemory are equal to -1
+     */
+    public static RamData getAvailableRamOldApi(Context context){
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+        long availableMemory = mi.availMem;
+        long totalMemory = -1;
+        long usedMemory = -1;
+        double percentage = -1;
+        return new RamData(availableMemory, usedMemory, percentage, totalMemory);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static RamData getAvailableRamNewApi(Context context){
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+        long availableMemory = mi.availMem;
+        long totalMemory = mi.totalMem;
+        long usedMemory = totalMemory-availableMemory;
+        double percentage = ((double) usedMemory)/ totalMemory;
+        return new RamData(availableMemory, usedMemory, percentage, totalMemory);
+    }
+
+    public static class RamData {
+
+        private long availableMemory;
+        private long usedMemory;
+        private double percentage;
+        private long totalMemory;
+
+        public RamData(long availableMemory, long usedMemory, double percentage, long totalMemory){
+            this.availableMemory = availableMemory;
+            this.usedMemory = usedMemory;
+            this.percentage = percentage;
+            this.totalMemory = totalMemory;
+        }
+
+        public long getAvailableMemory() {
+            return availableMemory;
+        }
+
+        public void setAvailableMemory(long availableMemory) {
+            this.availableMemory = availableMemory;
+        }
+
+        public double getPercentage() {
+            return percentage;
+        }
+
+        public void setPercentage(double percentage) {
+            this.percentage = percentage;
+        }
+
+        public long getTotalMemory() {
+            return totalMemory;
+        }
+
+        public void setTotalMemory(long totalMemory) {
+            this.totalMemory = totalMemory;
+        }
+
+        public long getUsedMemory() {
+            return usedMemory;
+        }
+
+        public void setUsedMemory(long usedMemory) {
+            this.usedMemory = usedMemory;
+        }
+
+        /**
+         * @return true if the clients should use only the @link availableMemory field, false otherwise
+         */
+        public boolean availableMemoryOnlyLoaded(){
+            return totalMemory == -1 && percentage == -1 && usedMemory == -1;
+        }
+    }
+
+    public static FsData getAvailableSpaceOnExternalMemory(Context context){
+        if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return getAvailableSpaceNewApi(context, Environment.getExternalStorageDirectory().getPath());
+        } else {
+            return getAvailableSpaceOldApi(context, Environment.getExternalStorageDirectory().getPath());
+        }
+    }
+
+    public static FsData getAvailableSpaceOnInternalMemory(Context context){
+        if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return getAvailableSpaceNewApi(context, Environment.getDataDirectory().getPath());
+        } else {
+            return getAvailableSpaceOldApi(context, Environment.getDataDirectory().getPath());
+        }
+    }
+
+    /**
+     * For target Api < 18
+     * @param context
+     * @return
+     */
+    private static FsData getAvailableSpaceOldApi(Context context, String path){
+        StatFs stat = new StatFs(path);
+        long availableSpace = (long)stat.getBlockSize() * (long)stat.getBlockCount();
+        long totalSpace = -1;
+        long usedSpace = -1;
+        double percentage = -1;
+        return new FsData(availableSpace, usedSpace, totalSpace, percentage);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private static FsData getAvailableSpaceNewApi(Context context, String path){
+        StatFs stat = new StatFs(path);
+        long availableSpace = stat.getBlockSizeLong() * stat.getBlockCountLong();
+        long totalSpace = stat.getTotalBytes();
+        long usedSpace = totalSpace - availableSpace;
+        double percentage = ((double) usedSpace)/ totalSpace;
+        return new FsData(availableSpace, usedSpace, totalSpace, percentage);
+    }
+
+    public static class FsData {
+
+        private long availableSpace;
+
+        private long usedSpace;
+
+        private long totalSpace;
+
+        private double percentage;
+
+        public FsData(long availableSpace, long usedSpace, long totalSpace, double percentage) {
+            this.availableSpace = availableSpace;
+            this.usedSpace = usedSpace;
+            this.totalSpace = totalSpace;
+            this.percentage = percentage;
+        }
+
+        public long getAvailableSpace() {
+            return availableSpace;
+        }
+
+        public void setAvailableSpace(long availableSpace) {
+            this.availableSpace = availableSpace;
+        }
+
+        public long getUsedSpace() {
+            return usedSpace;
+        }
+
+        public void setUsedSpace(long usedSpace) {
+            this.usedSpace = usedSpace;
+        }
+
+        public long getTotalSpace() {
+            return totalSpace;
+        }
+
+        public void setTotalSpace(long totalSpace) {
+            this.totalSpace = totalSpace;
+        }
+
+        public double getPercentage() {
+            return percentage;
+        }
+
+        public void setPercentage(double percentage) {
+            this.percentage = percentage;
+        }
+
+        /**
+         * @return true if the clients should use only the @link availableSpace field, false otherwise
+         */
+        public boolean availableSpaceOnlyLoaded(){
+            return totalSpace == -1 && percentage == -1 && usedSpace == -1;
+        }
+    }
+
+    public static boolean deviceHasExternalStorage(){
+        return isExternalStorageReadable();
+    }
+
+    /* Checks if external storage is available to at least read */
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

@@ -16,18 +16,9 @@ package com.thunder.network;
  * limitations under the License.
  */
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /**
  * WARNING: traceroute needs root permission
- * @param host
- * @param listener
- * @throws IOException
- * @throws InterruptedException
  */
-@Deprecated
 public class TracerouteCommand extends NetworkCommand {
 
 

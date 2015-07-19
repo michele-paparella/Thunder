@@ -2,8 +2,7 @@
 - app
 - crypto
 - device
-- iap 
-- log
+- iap
 - network
 - prefs
 - rating
@@ -23,10 +22,6 @@ This module provides important data about your physical device, e.g. screen reso
 iap (In-App Purchases)
 --------------
 If you need to include In-App Purchases (http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both In-app items & subscriptions
-
-log
---------------
-TODO
 
 network
 --------------
