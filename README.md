@@ -1,78 +1,78 @@
 Thunder - v. 2.0
 -------------
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly. It contains the following modules out of the box:
-- app
-- crypto
-- device
-- iap
-- network
-- prefs
-- rating
+- App
+- Crypto
+- Device
+- IAP
+- Network
+- Prefs
+- Rating
 
-app
+App
 --------------
-This module is designed to gives you the chance of getting all the related data of your app through a simple class (AppManager)
+This module is designed to gives you the chance of getting related data of your app (e.g. version code) through a simple class - [*AppManager*](thunder/src/main/java/com/thunder/app/AppManager.java). It allows, also, to send an email or to start an intent for sharing text with only one line of code (check the methods *startEmailIntent* or *startShareIntent*).
 
-crypto
+Crypto
 --------------
-It contains the most famous hashing algorithms, such as MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512
+It contains the most famous hashing algorithms, such as *MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512*. You can use this module through the class [*CryptoHelper*](thunder/src/main/java/com/thunder/crypto/CryptoHelper.java).
 
-device
+Device
 --------------
 This module provides important data about your physical device, e.g. screen resolution or OS version
 
-iap (In-App Purchases)
+IAP (In-App Purchases)
 --------------
 If you need to include In-App Purchases (http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both In-app items & subscriptions
 
-network
+Network
 --------------
 A layer that makes which helps a lot for network related operations (for example checking internet connection or whether a hostname is reachable)
 
-prefs
+Prefs
 --------------
 This module allows you to have a single entry point that handle all common operations on SharedPreferences (http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit
 
-rating
+Rating
 --------------
 It provides a really simple way (only one line of code) for implementing a rating popup. You can also build your custom rating popup through the *res/values/thunder_config.xml* file. In order to use this popup, the first step is to declare your custom RatingPopupListener:
 
 	public class CustomRatingPopupListener implements com.thunder.rating.RatingPopupListener {
 
-  	  @Override
-  	  public void onRatingShow() {
-  	      //the user sees the popup
-  	  }
+  	  	@Override
+  	  	public void onRatingShow() {
+  	  	    //the user sees the popup
+  	  	}
 
-    @Override
-    public void onRatingOk() {
-        //the user wants to rate your app :)
-    }
+    	@Override
+   		public void onRatingOk() {
+       		//the user wants to rate your app :)
+    	}
 
-    @Override
-    public void onRatingCancel() {
-        //the user cancelled the popup (e.g. throught onBackPressed)
-    }
+    	@Override
+    	public void onRatingCancel() {
+        	//the user cancelled the popup (e.g. throught onBackPressed)
+   		}
 
-    @Override
-    public void onRatingLater() {
-        //the user pressed the "later" button
-    }
+    	@Override
+    	public void onRatingLater() {
+        	//the user pressed the "later" button
+    	}
 
-    @Override
-    public void onRatingNo() {
-        //the user pressed the "never" button
-    }
+    	@Override
+    	public void onRatingNo() {
+        	//the user pressed the "never" button
+    	}
 
 	}
 
 and then override the onResume method of an Activity:
 
-	    @Override
-    	protected void onResume() {
+	@Override
+    protected void onResume() {
         super.onResume();
         if (listener == null){
-            listener = new CustomRatingPopupListener();
+       		listener = new CustomRatingPopupListener();
         }
         RatingPopupImpl.getInstance(this, listener).onResume();
     }
