@@ -1,0 +1,17 @@
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+
+/Thunder.iml
+
+/thunder/thunder.iml
+
+/.idea/
+
+/thunder/Thunder-Thunder.iml
+
+/thunder-sample/thunder-sample.iml
