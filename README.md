@@ -1,6 +1,7 @@
-Thunder - v. 2.0
--------------
+Thunder 2.0
+==============
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly. It contains the following modules out of the box:
+
 - App
 - Crypto
 - Device
@@ -8,6 +9,15 @@ Thunder - v. 2.0
 - Network
 - Prefs
 - Rating
+
+Download
+==============
+You can grab the last version [**HERE**] in the *aar* format
+
+
+Modules 
+==============
+The library has been designed with one goal: make the developer life easier with a bunch of useful classes and methods. The available modules in the last version of *Thunder* are following.
 
 App
 --------------
@@ -19,19 +29,24 @@ It contains the most famous hashing algorithms, such as *MD2, MD5, SHA-1, SHA-25
 
 Device
 --------------
-This module provides important data about your physical device, e.g. screen resolution or OS version
+This module provides useful data about your physical device, e.g. screen resolution, OS version, free space or available RAM - check the class [*DeviceManager*](thunder/src/main/java/com/thunder/device/DeviceManager.java) for other details.
 
 IAP (In-App Purchases)
 --------------
-If you need to include In-App Purchases (http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both In-app items & subscriptions
+If you need to include [*In-App Purchases*](http://developer.android.com/google/play/billing/billing_overview.html) into your app, this module is what you need! A single entry point to manage both *In-app items* & *Subscriptions* in a glance!
 
 Network
 --------------
-A layer that makes which helps a lot for network related operations (for example checking internet connection or whether a hostname is reachable)
+A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager.java*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
+
+- ping - [*PingCommand.java*](thunder/src/main/java/com/thunder/network/PingCommand.java)
+- traceroute [*TracerouteCommand.java*](thunder/src/main/java/com/thunder/network/TracerouteCommand.java)
+- nsLookup [*NsLookupCommand.java*](thunder/src/main/java/com/thunder/network/NsLookupCommand.java)
+- whois [*WhoisCommand.java*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
 
 Prefs
 --------------
-This module allows you to have a single entry point that handle all common operations on SharedPreferences (http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit
+This module allows you to have a single entry point that handle all common operations on [*SharedPreferences*](http://developer.android.com/reference/android/content/SharedPreferences.html) - e.g. store a string or increment an integer value and then commit. If you want to discover more, please see the class [*SharedPrefsManager*](thunder/src/main/java/com/thunder/prefs/SharedPrefsManager.java).
 
 Rating
 --------------
@@ -46,7 +61,7 @@ It provides a really simple way (only one line of code) for implementing a ratin
 
     	@Override
    		public void onRatingOk() {
-       		//the user wants to rate your app :)
+       		//the user wants to rate your app!
     	}
 
     	@Override
@@ -89,9 +104,7 @@ To override these values, simply create a new file **thunder_config.xml** in *re
 	<resources>
 
     	<integer name="first_rating_popup">2</integer>
-
     	<integer name="negative_rating_popup">2</integer>
-
    		<integer name="neutral_rating_popup">1</integer>
 
 	</resources>
@@ -105,7 +118,7 @@ Important details
 
 Sample project
 ---------------
-In order to show how to integrate *Thunder* into your app, a sample project - *Thunder Sample* - has been published here https://github.com/michele-paparella/ThunderSample.
+In order to figure out how to integrate *Thunder* into your app, a sample project has been published - [*Thunder Sample*](https://github.com/michele-paparella/ThunderSample).
 
 Compatibility
 ---------------
@@ -115,11 +128,11 @@ Permissions
 ---------------
 In order to use *Thunder*, please be aware that the library uses the following permissions:
 
-- android.permission.READ_PHONE_STATE
-- android.permission.ACCESS_NETWORK_STATE
-- android.permission.INTERNET
-- android.permission.READ_EXTERNAL_STORAGE
-- com.android.vending.BILLING
+- *android.permission.READ_PHONE_STATE*
+- *android.permission.ACCESS_NETWORK_STATE*
+- *android.permission.INTERNET*
+- *android.permission.READ_EXTERNAL_STORAGE*
+- *com.android.vending.BILLING*
 
 License
 ==============
