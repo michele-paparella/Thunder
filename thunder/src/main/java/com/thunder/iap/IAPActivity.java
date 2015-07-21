@@ -42,6 +42,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * a useful class that must be extended in order to use the In-App Purchases API from
+ * an app
+ */
 public abstract class IAPActivity extends Activity {
 
     private IInAppBillingService mService;
@@ -79,6 +83,11 @@ public abstract class IAPActivity extends Activity {
         }
     }
 
+    /**
+     *
+     * @param skuList the list of available skus
+     * @param listener
+     */
     public void getSkuDetails(final ArrayList<String> skuList, final SkuDetailsListener listener){
         new Thread(new Runnable() {
             @Override
@@ -116,6 +125,12 @@ public abstract class IAPActivity extends Activity {
         }).start();
     }
 
+    /**
+     *
+     * @param sku the item that the user wants to buy
+     * @param developerPayload the developer payload string, more info here http://developer.android.com/training/in-app-billing/purchase-iab-products.html
+     * @param buyItemListener
+     */
     public void buyItem(final String sku, final String developerPayload, final BuyItemListener buyItemListener){
         this.buyItemListener = buyItemListener;
         new Thread(new Runnable() {
@@ -194,6 +209,10 @@ public abstract class IAPActivity extends Activity {
         }
     }
 
+    /**
+     * returns a list of purchased items for the current user
+     * @param purchasedItemsListener
+     */
     public void getInAppPurchasedItems(final PurchasedItemsListener purchasedItemsListener){
         new Thread(new Runnable() {
             @Override
@@ -203,7 +222,11 @@ public abstract class IAPActivity extends Activity {
         }).start();
     }
 
-
+    /**
+     * consume a purchase
+     * @param purchaseToken
+     * @param consumePurchaseListener
+     */
     public void consumePurchase(final String purchaseToken, final ConsumePurchaseListener consumePurchaseListener){
         new Thread(new Runnable() {
             @Override
@@ -223,6 +246,12 @@ public abstract class IAPActivity extends Activity {
         }).start();
     }
 
+    /**
+     * this methods is needed when a user wants to buy a subscription
+     * @param sku
+     * @param developerPayload
+     * @param buySubscriptionListener
+     */
     public void buySubscription(final String sku, final String developerPayload, final BuySubscriptionListener buySubscriptionListener){
         this.buySubscriptionListener = buySubscriptionListener;
         new Thread(new Runnable() {
@@ -253,6 +282,10 @@ public abstract class IAPActivity extends Activity {
         }).start();
     }
 
+    /**
+     * returns the purchased subscriptions
+     * @param purchasedItemsListener
+     */
     public void getPurchasedSubscriptions(final PurchasedItemsListener purchasedItemsListener){
         new Thread(new Runnable() {
             @Override
@@ -262,6 +295,11 @@ public abstract class IAPActivity extends Activity {
         }).start();
     }
 
+    /**
+     * returns the purchased items for a user
+     * @param itemType
+     * @param purchasedItemsListener
+     */
     public void getPurchasedItems(String itemType, PurchasedItemsListener purchasedItemsListener){
         try {
             Bundle ownedItems = mService.getPurchases(3, getPackageName(), itemType, null);

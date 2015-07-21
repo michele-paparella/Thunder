@@ -23,6 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * a layer that allows a developer to call useful methods to deal with SharedPreferences
+ */
 public class SharedPrefsManager {
 
     private SharedPreferences sharedPreferences;
@@ -100,6 +103,10 @@ public class SharedPrefsManager {
         }
     }
 
+    /**
+     * async method
+     * @param defValues
+     */
     public void putValuesAsync(Map<String,Object> defValues){
         for (String key: defValues.keySet()){
             putValueAsyncFor(key, defValues.get(key));
@@ -107,7 +114,6 @@ public class SharedPrefsManager {
     }
 
     /**
-     *
      * @param key
      * @param value
      */
@@ -132,93 +138,207 @@ public class SharedPrefsManager {
         }
     }
 
+    /**
+     * sync method
+     * @param defValues
+     */
     public void putValuesSync(Map<String,Object> defValues){
         for (String key: defValues.keySet()){
             putValueSyncFor(key, defValues.get(key));
         }
     }
 
+    /**
+     *
+     * @param key
+     * @return true if the key is in the SharedPreferences file, false otherwise
+     */
     public Boolean contains(String key){
         return sharedPreferences.contains(key);
     }
 
+    /**
+     *
+     * @param key
+     * @param defValue the default value if the key is not in the SharedPreferencesFile
+     * @param step the value of the increment
+     */
     public void incrementSync(String key, int defValue, int step){
         int oldValue = getInt(key, defValue);
         sharedPreferences.edit().putInt(key, oldValue+step).commit();
     }
 
+    /**
+     *
+     * @param key
+     * @param defValue
+     * @return
+     */
     public int getInt(String key, int defValue){
         return sharedPreferences.getInt(key, defValue);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putIntSync(String key, int value){
         sharedPreferences.edit().putInt(key, value).commit();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putIntAsync(String key, int value){
         sharedPreferences.edit().putInt(key, value).apply();
     }
 
+    /**
+     *
+     * @param key
+     * @param defValue
+     * @return
+     */
     public long getLong(String key, long defValue){
         return sharedPreferences.getLong(key, defValue);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putLongSync(String key, long value){
         sharedPreferences.edit().putLong(key, value).commit();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putLongAsync(String key, long value){
         sharedPreferences.edit().putLong(key, value).apply();
     }
 
+    /**
+     *
+     * @param key
+     * @param defValue
+     * @return
+     */
     public String getString(String key, String defValue){
         return sharedPreferences.getString(key, defValue);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putStringSync(String key, String value){
         sharedPreferences.edit().putString(key, value).commit();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putStringAsync(String key, String value){
         sharedPreferences.edit().putString(key, value).apply();
     }
 
+    /**
+     *
+     * @param key
+     * @param defValue
+     * @return
+     */
     public float getFloat(String key, float defValue){
         return sharedPreferences.getFloat(key, defValue);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putFloatSync(String key, float value){
         sharedPreferences.edit().putFloat(key, value).commit();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putFloatAsync(String key, float value){
         sharedPreferences.edit().putFloat(key, value).apply();
     }
 
+    /**
+     *
+     * @param key
+     * @param defValue
+     * @return
+     */
     public boolean getBoolean(String key, boolean defValue){
         return sharedPreferences.getBoolean(key, defValue);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putBooleanSync(String key, boolean value){
         sharedPreferences.edit().putBoolean(key, value).commit();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putBooleanAsync(String key, boolean value){
         sharedPreferences.edit().putBoolean(key, value).apply();
     }
 
+    /**
+     *
+     * @param key
+     * @param defValue
+     * @return
+     */
     public Set<String> getStringSet(String key, Set<String> defValue){
         return sharedPreferences.getStringSet(key, defValue);
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putStringSetSync(String key, Set<String> value){
         sharedPreferences.edit().putStringSet(key, value).commit();
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void putStringSetAsync(String key, Set<String> value){
         sharedPreferences.edit().putStringSet(key, value).apply();
     }
 
+    /**
+     *
+     */
     public void clearSync(){
         sharedPreferences.edit().clear().commit();
     }

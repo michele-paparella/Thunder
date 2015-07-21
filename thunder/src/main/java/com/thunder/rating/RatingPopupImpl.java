@@ -27,6 +27,9 @@ import android.net.Uri;
 import com.thunder.R;
 import com.thunder.prefs.SharedPrefsManager;
 
+/**
+ * A useful class that allows you to present a RatingPopup for your app
+ */
 public class RatingPopupImpl implements RatingPopup{
 
 
@@ -41,9 +44,15 @@ public class RatingPopupImpl implements RatingPopup{
     private static Activity activity;
     private static RatingPopupImpl instance;
 
-    public static RatingPopupImpl getInstance(Activity a, RatingPopupListener listener) {
+    /**
+     * singleton implementation
+     * @param activity
+     * @param listener
+     * @return
+     */
+    public static RatingPopupImpl getInstance(Activity activity, RatingPopupListener listener) {
         if (instance == null){
-            activity = a;
+            activity = activity;
             ratingPopupListener = listener;
             sharedPrefsManager = new SharedPrefsManager(activity, PREFS_NAME, Context.MODE_PRIVATE);
             instance = new RatingPopupImpl();
@@ -66,7 +75,7 @@ public class RatingPopupImpl implements RatingPopup{
                     sharedPrefsManager.putBooleanSync(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, false);
                     showRateDialog();
                 }
-            }else if (sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == sharedPrefsManager.getInt(NEXT_RATING_POPUP, -1)) {
+            } else if (sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == sharedPrefsManager.getInt(NEXT_RATING_POPUP, -1)) {
                 if (!activity.isFinishing()) {
                     showRateDialog();
                 }

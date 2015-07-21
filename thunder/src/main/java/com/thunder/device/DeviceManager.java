@@ -36,11 +36,23 @@ import com.thunder.exception.DataNotAvailableException;
 
 import java.io.IOException;
 
+/**
+ * A useful class that provides data about the device, e.g. screen resolution or IMEI
+ */
 public class DeviceManager {
 
-    // Do not call this function from the main thread. Otherwise,
-    // an IllegalStateException will be thrown.
-    //TODO test
+    /**
+     * Do not call this function from the main thread, otherwise,
+     * an IllegalStateException will be thrown.
+     * See @link https://developers.google.com/android/reference/com/google/android/gms/ads/identifier/AdvertisingIdClient
+     *
+     * @param context
+     * @return the advertising id
+     * @throws GooglePlayServicesNotAvailableException
+     * @throws IOException
+     * @throws GooglePlayServicesRepairableException
+     * @throws DataNotAvailableException
+     */
     public static String getAdvertisingId(Context context) throws GooglePlayServicesNotAvailableException, IOException, GooglePlayServicesRepairableException, DataNotAvailableException {
         AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
         if (adInfo != null) {
@@ -51,7 +63,18 @@ public class DeviceManager {
         }
     }
 
-    //TODO test
+    /**
+     *
+     * See @link https://developers.google.com/android/reference/com/google/android/gms/ads/identifier/AdvertisingIdClient
+     *
+     *
+     * @param context
+     * @return true if the user has limit ad tracking enabled
+     * @throws GooglePlayServicesNotAvailableException
+     * @throws IOException
+     * @throws GooglePlayServicesRepairableException
+     * @throws DataNotAvailableException
+     */
     public static boolean isLimitAdTrackingEnabled(Context context) throws GooglePlayServicesNotAvailableException, IOException, GooglePlayServicesRepairableException, DataNotAvailableException {
         AdvertisingIdClient.Info adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
         if (adInfo != null) {
@@ -108,6 +131,22 @@ public class DeviceManager {
         return point;
     }
 
+    /**
+     *
+     * Gets display metrics that describe the size and density of this display.
+     * <p>
+     * The size is adjusted based on the current rotation of the display.
+     * </p><p>
+     * The size returned by this method does not necessarily represent the
+     * actual raw size (native resolution) of the display.  The returned size may
+     * be adjusted to exclude certain system decor elements that are always visible.
+     * It may also be scaled to provide compatibility with older applications that
+     * were originally designed for smaller displays.
+     * </p>
+     *
+     * @param context
+     * @return
+     */
     private static DisplayMetrics getDisplayMetrics(Context context){
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -218,22 +257,43 @@ public class DeviceManager {
         }
     }
 
+    /**
+     *
+     * @return The name of the industrial design
+     */
     public static String getIndustrialDeviceName(){
         return Build.DEVICE;
     }
 
+    /**
+     *
+     * @return A build ID string meant for displaying to the user
+     */
     public static String getBuildId(){
         return Build.DISPLAY;
     }
 
+    /**
+     *
+     * @return The name of the hardware (from the kernel command line or /proc).
+     */
     public static String getHardwareName(){
         return Build.HARDWARE;
     }
 
+    /**
+     *
+     * @return A hardware serial number, if available.  Alphanumeric only, case-insensitive.
+     */
     public static String getHardwareSerialNumber() {
         return Build.SERIAL;
     }
 
+    /**
+     *
+     * @param context
+     * @return a link RamData object that contains data about the RAM of the device
+     */
     public static RamData getAvailableRam(Context context){
         if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN) {
             return getAvailableRamNewApi(context);
@@ -247,7 +307,7 @@ public class DeviceManager {
      * @param context
      * @return @link RamData object with only availableMemory. Other fields, such as totalMemory are equal to -1
      */
-    public static RamData getAvailableRamOldApi(Context context){
+    private static RamData getAvailableRamOldApi(Context context){
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
@@ -258,8 +318,13 @@ public class DeviceManager {
         return new RamData(availableMemory, usedMemory, percentage, totalMemory);
     }
 
+    /**
+     * for Api < 16
+     * @param context
+     * @return @link RamData object with only availableMemory.
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static RamData getAvailableRamNewApi(Context context){
+    private static RamData getAvailableRamNewApi(Context context){
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
@@ -324,6 +389,11 @@ public class DeviceManager {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @return a link FsData object that contains the available space on the external memory
+     */
     public static FsData getAvailableSpaceOnExternalMemory(Context context){
         if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return getAvailableSpaceNewApi(Environment.getExternalStorageDirectory().getPath());
@@ -332,6 +402,11 @@ public class DeviceManager {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @return a link FsData object that contains the available space on the internal memory
+     */
     public static FsData getAvailableSpaceOnInternalMemory(Context context){
         if (DeviceManager.getApiVersion(context) >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return getAvailableSpaceNewApi(Environment.getDataDirectory().getPath());
@@ -342,7 +417,7 @@ public class DeviceManager {
 
     /**
      * For target Api < 18
-     * @return
+     * @return a link FsData object that contains the available space on the internal memory
      */
     private static FsData getAvailableSpaceOldApi(String path){
         StatFs statFs = new StatFs(path);
@@ -354,6 +429,11 @@ public class DeviceManager {
         return new FsData(availableSpace, usedSpace, totalSpace, percentage);
     }
 
+    /**
+     *
+     * @param path
+     * @return a link FsData object that contains the available space on the internal memory
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private static FsData getAvailableSpaceNewApi(String path){
         StatFs statFs = new StatFs(path);
@@ -419,7 +499,10 @@ public class DeviceManager {
         return isExternalStorageReadable();
     }
 
-    /* Checks if external storage is available to at least read */
+    /**
+     * Checks if external storage is available to at least read
+     *
+     */
     public static boolean isExternalStorageReadable() {
         if (Environment.getExternalStorageDirectory().getPath().contains("emulated")){
             return false;

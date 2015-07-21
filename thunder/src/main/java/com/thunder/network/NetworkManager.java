@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * A class that helps with network related operations
+ */
 public class NetworkManager {
 
     private final static String TAG = "NetworkManager";
@@ -63,7 +66,12 @@ public class NetworkManager {
     }
 
 
-
+    /**
+     *
+     * @param context
+     * @return a string that represents the current connection type
+     * @throws DataNotAvailableException
+     */
     public static String printActiveConnectionType(Context context) throws DataNotAvailableException {
         int type = getActiveConnectionType(context);
         switch (type){
@@ -91,15 +99,33 @@ public class NetworkManager {
         return "";
     }
 
-
-    public static List<String> getIPv4Address(Context context) throws DataNotAvailableException {
+    /**
+     *
+     * @param context
+     * @return the list of current IPv4 addresses
+     * @throws DataNotAvailableException
+     */
+    public static List<String> getIPv4Addresses(Context context) throws DataNotAvailableException {
         return getIP(context, true);
     }
 
-    public static List<String> getIPv6Address(Context context) throws DataNotAvailableException {
+    /**
+     *
+     * @param context
+     * @return the list of current IPv6 addresses
+     * @throws DataNotAvailableException
+     */
+    public static List<String> getIPv6Addresses(Context context) throws DataNotAvailableException {
         return getIP(context, false);
     }
 
+    /**
+     *
+     * @param context
+     * @param ipv4 true if we are looking for only IPv4 addresses
+     * @return
+     * @throws DataNotAvailableException
+     */
     private static List<String> getIP(Context context, boolean ipv4) throws DataNotAvailableException {
         try {
             ArrayList<String> result = new ArrayList<>(10);
@@ -123,6 +149,7 @@ public class NetworkManager {
     }
 
     /**
+     * ping command
      *
      * @param host
      * @param times
@@ -134,6 +161,8 @@ public class NetworkManager {
     }
 
     /**
+     * traceroute command
+     *
      * WARNING: traceroute needs root permission
      * @param host
      * @param listener
@@ -145,12 +174,24 @@ public class NetworkManager {
     }
 
     /**
+     * nslookup command
      *
      * @param host
      * @param listener
      */
     public static void nsLookup(final String host, final OnPartialResultListener listener) {
         NetworkCommand command = new NsLookupCommand();
+        command.runCommand(host, listener);
+    }
+
+    /**
+     * whois command
+     *
+     * @param host
+     * @param listener
+     */
+    public static void whois(final String host, final OnPartialResultListener listener){
+        WhoisCommand command = new WhoisCommand();
         command.runCommand(host, listener);
     }
 

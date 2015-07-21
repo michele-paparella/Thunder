@@ -16,6 +16,9 @@ package com.thunder.exception;
  * limitations under the License.
  */
 
+/**
+ * an Exception that is needed to tell the clients that no data is available
+ */
 public class DataNotAvailableException extends Exception {
 
     public DataNotAvailableException(String message){

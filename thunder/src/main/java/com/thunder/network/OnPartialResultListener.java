@@ -16,12 +16,18 @@ package com.thunder.network;
  * limitations under the License.
  */
 
+/**
+ * A listener for a network command
+ */
 public interface OnPartialResultListener {
 
+    //there is a partial result
     void onPartialResult(final String result);
 
+    //an error occurred during a command
     void onError(final Exception e);
 
+    //the command has finished
     void onFinish();
 
 }

@@ -27,6 +27,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.thunder.R;
 import com.thunder.exception.DataNotAvailableException;
 
+/**
+ * This class is responsible for managing data related to the app, e.g. version code, app name.
+ */
 public class AppManager {
 
     /**
@@ -47,6 +50,13 @@ public class AppManager {
         return pInfo.versionCode;
     }
 
+    /**
+     *
+     * @param context
+     * @return the app name string taken from the manifest
+     * @throws PackageManager.NameNotFoundException
+     * @throws DataNotAvailableException
+     */
     public static String getAppName(Context context) throws PackageManager.NameNotFoundException, DataNotAvailableException {
         PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
         if (context.getPackageManager().getApplicationLabel(pInfo.applicationInfo) != null) {
@@ -55,10 +65,23 @@ public class AppManager {
         throw new DataNotAvailableException(context.getString(R.string.app_name_not_found));
     }
 
-    public static String getPackage(Context context){
+    /**
+     *
+     * @param context
+     * @return the current package name
+     */
+    public static String getPackageName(Context context){
         return context.getPackageName();
     }
 
+    /**
+     * it starts a new email intent
+     *
+     * @param context
+     * @param address the recipient address
+     * @param subject of the email
+     * @param text the message
+     */
     public static void startEmailIntent(Context context, String address, String subject, String text){
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
                 Uri.fromParts("mailto", address, null));
@@ -71,7 +94,13 @@ public class AppManager {
         context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.chooser_email_title)));
     }
 
-    public static void startShareIntent(Context context, String textData){
+    /**
+     * it starts a new sharing intent
+     *
+     * @param context
+     * @param textData the shared data
+     */
+    public static void startSharingIntent(Context context, String textData){
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, textData);
@@ -79,6 +108,10 @@ public class AppManager {
         context.startActivity(sendIntent);
     }
 
+    /**
+     * this method hides the soft keyboard of the device
+     * @param activity
+     */
     public static void hideSoftKeyboard(Activity activity) {
         if (activity != null && activity.getCurrentFocus() != null && activity.getCurrentFocus().getWindowToken() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

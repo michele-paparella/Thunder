@@ -16,6 +16,9 @@ package com.thunder.network;
  * limitations under the License.
  */
 
+/**
+ * ping command implementation
+ */
 public class PingCommand extends NetworkCommand {
 
     public PingCommand(int times){

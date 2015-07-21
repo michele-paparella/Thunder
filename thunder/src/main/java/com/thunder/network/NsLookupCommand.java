@@ -16,6 +16,9 @@ package com.thunder.network;
  * limitations under the License.
  */
 
+/**
+ * nslookup command implementation
+ */
 public class NsLookupCommand extends NetworkCommand {
 
     public NsLookupCommand(){

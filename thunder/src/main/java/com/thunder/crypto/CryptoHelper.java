@@ -22,6 +22,9 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * This class provides useful methods for computing common hashing algorithms
+ */
 public class CryptoHelper {
 
     private static final String MD2 = "MD2";
@@ -32,18 +35,46 @@ public class CryptoHelper {
     private static final String SHA512 = "SHA-512";
     private static final String UTF_8 = "UTF-8";
 
+    /**
+     *
+     * @param input
+     * @return the hashed string using the MD2 algorithm
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
     public static String md2(String input) throws NoSuchAlgorithmException, IOException {
         return useAlgorithm(MD2, input);
     }
 
+    /**
+     *
+     * @param input
+     * @return the hashed string using the MD5 algorithm
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
     public static String md5(String input) throws NoSuchAlgorithmException, IOException {
         return useAlgorithm(MD5, input);
     }
 
+    /**
+     *
+     * @param input
+     * @return the hashed string using the SHA1 algorithm
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
     public static String sha1(String input) throws NoSuchAlgorithmException, IOException {
         return useAlgorithm(SHA1, input);
     }
 
+    /**
+     *
+     * @param input
+     * @return the hashed string using the SHA256 algorithm
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
     public static String sha256(String input) throws NoSuchAlgorithmException, IOException {
         return useAlgorithm(SHA256, input);
     }
@@ -52,10 +83,25 @@ public class CryptoHelper {
         return useAlgorithm(SHA384, input);
     }
 
+    /**
+     *
+     * @param input
+     * @return the hashed string using the SHA512 algorithm
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
     public static String sha512(String input) throws NoSuchAlgorithmException, IOException {
         return useAlgorithm(SHA512, input);
     }
 
+    /**
+     *
+     * @param name the name of the hash algorithm
+     * @param input
+     * @return the hashed string using the algorithm defined by name
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
     private static String useAlgorithm(String name, String input) throws NoSuchAlgorithmException, IOException {
         MessageDigest digester = MessageDigest.getInstance(name);
         InputStream stream = new ByteArrayInputStream(input.getBytes(UTF_8));

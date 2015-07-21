@@ -20,6 +20,9 @@ import org.apache.commons.net.whois.WhoisClient;
 
 import java.io.IOException;
 
+/**
+ * whois command implementation
+ */
 public class WhoisCommand extends NetworkCommand {
 
     public WhoisCommand(){

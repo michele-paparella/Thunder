@@ -19,6 +19,9 @@ package com.thunder.network;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/**
+ * an abstract class that models a generic network command
+ */
 public abstract class NetworkCommand {
 
     private static String command;
@@ -29,6 +32,11 @@ public abstract class NetworkCommand {
         this.command = command;
     }
 
+    /**
+     *
+     * @param host input domain
+     * @param listener
+     */
     public void runCommand(final String host, final OnPartialResultListener listener) {
         this.listener = listener;
         this.domain = host;

@@ -17,6 +17,8 @@ package com.thunder.network;
  */
 
 /**
+ * traceroute network command implementation
+ *
  * WARNING: traceroute needs root permission
  */
 public class TracerouteCommand extends NetworkCommand {

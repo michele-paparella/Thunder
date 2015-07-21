@@ -21,6 +21,9 @@ import android.text.Html;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * fallback for the NsLookup Command
+ */
 public class NsLookupTask implements Runnable {
 
     private OnPartialResultListener listener;
