@@ -2,7 +2,7 @@
 *Thunder* is a flexible library for Android that helps you to build apps painlessly and quickly.
 
 ##  Download
-You can grab the [**last version**](https://github.com/michele-paparella/Thunder/releases/download/2.0_release/thunder-release.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](README.md#library-setup).
+You can grab the [**last version**](https://github.com/michele-paparella/Thunder/releases/download/2.0_release/thunder_release_2_0.aar) [2.0] in the *aar* format. You could, however, import the library as a [*Git submodule*](https://git-scm.com/book/en/v2/Git-Tools-Submodules) in order to contribute to the project. If you have trouble with the setup, at the end of this page you can find a [tutorial](README.md#library-setup).
 
 ## Documentation
 You could find the online *javadoc* documentation [**here**](http://michele-paparella.github.io/Thunder/) or you can also [*download it*](https://github.com/michele-paparella/Thunder/releases/download/2.0_release/javadoc.zip).
