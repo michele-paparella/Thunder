@@ -72,12 +72,26 @@ public class RatingPopupImpl implements RatingPopup{
             if (sharedPrefsManager.getBoolean(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, true) &&
                     sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == getConfigurationValue(R.integer.first_rating_popup)) {
                 if (!activity.isFinishing()) {
-                    sharedPrefsManager.putBooleanSync(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, false);
-                    showRateDialog();
+                    try {
+                        sharedPrefsManager.putBooleanSync(SHOULD_CHECK_FOR_FIRST_RATING_POPUP, false);
+                        showRateDialog();
+                        if (ratingPopupListener != null){
+                            ratingPopupListener.onRatingShow();
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             } else if (sharedPrefsManager.getInt(CURRENT_RATING_POPUP, -1) == sharedPrefsManager.getInt(NEXT_RATING_POPUP, -1)) {
                 if (!activity.isFinishing()) {
-                    showRateDialog();
+                    try {
+                        showRateDialog();
+                        if (ratingPopupListener != null){
+                            ratingPopupListener.onRatingShow();
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -140,9 +154,6 @@ public class RatingPopupImpl implements RatingPopup{
                 }
             }
         });
-        if (ratingPopupListener != null){
-            ratingPopupListener.onRatingShow();
-        }
         builder.create().show();
     }
 
