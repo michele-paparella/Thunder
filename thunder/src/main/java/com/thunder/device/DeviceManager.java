@@ -23,6 +23,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -226,6 +227,33 @@ public class DeviceManager {
     public static String getImei(Context context){
         TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return tMgr.getDeviceId();
+    }
+
+    /**
+     * A 64-bit number (as a hex string) that is randomly
+     * generated when the user first sets up the device and should remain
+     * constant for the lifetime of the user's device. The value may
+     * change if a factory reset is performed on the device.
+     * <p class="note"><strong>Note:</strong> When a device has <a
+     * href="{@docRoot}about/versions/android-4.2.html#MultipleUsers">multiple users</a>
+     * (available on certain devices running Android 4.2 or higher), each user appears as a
+     * completely separate device, so the {@code ANDROID_ID} value is unique to each
+     * user.</p>
+     */
+    public static String getAndroidId(Context context){
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    /**
+     * Returns the unique subscriber ID, for example, the IMSI for a GSM phone.
+     * Return null if it is unavailable.
+     * <p>
+     * Requires Permission:
+     *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
+     */
+    public static String getImsi(Context context){
+        TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return tMgr.getSubscriberId();
     }
 
     public static String getBoardName(){

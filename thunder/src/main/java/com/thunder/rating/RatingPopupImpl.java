@@ -50,11 +50,11 @@ public class RatingPopupImpl implements RatingPopup{
      * @param listener
      * @return
      */
-    public static RatingPopupImpl getInstance(Activity activity, RatingPopupListener listener) {
+    public static RatingPopupImpl getInstance(Activity currentActivity, RatingPopupListener listener) {
         if (instance == null){
-            activity = activity;
+            activity = currentActivity;
             ratingPopupListener = listener;
-            sharedPrefsManager = new SharedPrefsManager(activity, PREFS_NAME, Context.MODE_PRIVATE);
+            sharedPrefsManager = new SharedPrefsManager(currentActivity, PREFS_NAME, Context.MODE_PRIVATE);
             instance = new RatingPopupImpl();
         }
         return instance;
