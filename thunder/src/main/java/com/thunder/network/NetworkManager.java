@@ -161,19 +161,6 @@ public class NetworkManager {
     }
 
     /**
-     * traceroute command
-     *
-     * WARNING: traceroute needs root permission
-     * @param host
-     * @param listener
-     */
-    @Deprecated
-    public static void traceroute(final String host, final OnPartialResultListener listener) {
-        NetworkCommand command = new TracerouteCommand();
-        command.runCommand(host, listener);
-    }
-
-    /**
      * nslookup command
      *
      * @param host
