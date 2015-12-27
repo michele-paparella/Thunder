@@ -34,7 +34,6 @@ If you need to include [In-App Purchases](http://developer.android.com/google/pl
 A module that helps a lot for network related operations (for example checking internet connection or getting your current IPv4/IPv6 address) - the entry point is the class [*NetworkManager*](thunder/src/main/java/com/thunder/network/NetworkManager.java). It supports the following network commands:
 
 - ping - [*PingCommand*](thunder/src/main/java/com/thunder/network/PingCommand.java)
-- traceroute - [*TracerouteCommand*](thunder/src/main/java/com/thunder/network/TracerouteCommand.java)
 - nsLookup - [*NsLookupCommand*](thunder/src/main/java/com/thunder/network/NsLookupCommand.java)
 - whois - [*WhoisCommand*](thunder/src/main/java/com/thunder/network/WhoisCommand.java)
 
