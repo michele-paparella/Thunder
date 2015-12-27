@@ -143,6 +143,12 @@ In order to use *Thunder*, please be aware that the library uses the following p
 - *android.permission.READ_EXTERNAL_STORAGE*
 - *com.android.vending.BILLING*
 
+### Changelog
+
+*v. 2.0.2*
+
+- removed traceroute feature due to a lack of support by Android
+
 ### License
 	Copyright 2015 Michele Paparella
 
